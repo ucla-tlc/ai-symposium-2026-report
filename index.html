@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 UCLA AI Symposium — Post-Event Survey Report</title>
+<style>
+  :root {
+    --ucla-blue: #2774AE;
+    --ucla-dark: #003B5C;
+    --ucla-gold: #FFD100;
+    --ink: #1f2933;
+    --muted: #5a6672;
+    --line: #e2e8f0;
+    --bg-soft: #f7fafc;
+    --good: #2f855a;
+    --warn: #b7791f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    line-height: 1.6;
+    margin: 0;
+    background: #eef2f6;
+  }
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  header.hero {
+    background: linear-gradient(135deg, var(--ucla-dark), var(--ucla-blue));
+    color: #fff;
+    padding: 48px 56px 40px;
+  }
+  header.hero .kicker {
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: .8rem;
+    font-weight: 600;
+    opacity: .85;
+    margin: 0 0 10px;
+  }
+  header.hero h1 {
+    margin: 0 0 6px;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  header.hero p.sub {
+    margin: 4px 0 0;
+    font-size: 1.05rem;
+    opacity: .95;
+  }
+  header.hero .meta {
+    margin-top: 22px;
+    font-size: .9rem;
+    opacity: .9;
+    border-top: 3px solid var(--ucla-gold);
+    padding-top: 14px;
+    display: inline-block;
+  }
+  main { padding: 16px 56px 56px; }
+  h2 {
+    color: var(--ucla-dark);
+    font-size: 1.4rem;
+    margin: 42px 0 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line);
+  }
+  h2 .num {
+    color: var(--ucla-blue);
+    font-weight: 800;
+    margin-right: 10px;
+  }
+  h3 {
+    color: var(--ucla-blue);
+    font-size: 1.08rem;
+    margin: 26px 0 6px;
+  }
+  p { margin: 10px 0; }
+  .lead { font-size: 1.05rem; color: var(--muted); }
+
+  /* Stat cards */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0 8px;
+  }
+  .stat {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ucla-blue);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .stat .big {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--ucla-dark);
+    line-height: 1;
+  }
+  .stat .label {
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 6px;
+  }
+  .stat .detail {
+    font-size: .78rem;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+  @media (max-width: 680px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 8px;
+    font-size: .94rem;
+  }
+  thead th {
+    background: var(--ucla-dark);
+    color: #fff;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+  }
+  thead th.num, tbody td.num { text-align: right; }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  tbody tr:nth-child(even) { background: var(--bg-soft); }
+
+  /* Bar in table */
+  .barcell { min-width: 120px; }
+  .bar {
+    display: inline-block;
+    height: 10px;
+    border-radius: 5px;
+    background: var(--ucla-blue);
+    vertical-align: middle;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 600;
+  }
+  .badge.good { background: #e6f4ea; color: var(--good); }
+  .badge.mid  { background: #fef5e7; color: var(--warn); }
+
+  .note {
+    background: #fffbea;
+    border: 1px solid #f6e58d;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: .9rem;
+    color: #6b5900;
+    margin: 18px 0;
+  }
+  .callout {
+    background: var(--bg-soft);
+    border-left: 4px solid var(--ucla-gold);
+    border-radius: 6px;
+    padding: 4px 20px;
+    margin: 16px 0;
+  }
+  ul.tight li { margin: 5px 0; }
+  .tablenote {
+    font-size: .85rem;
+    color: var(--muted);
+    margin: 4px 0 6px;
+  }
+  .tableexplain { margin: 8px 0 4px; }
+  .quotes { margin: 16px 0; }
+  blockquote.q {
+    margin: 0 0 12px;
+    padding: 12px 16px 12px 18px;
+    background: var(--bg-soft);
+    border-left: 4px solid var(--ucla-blue);
+    border-radius: 0 8px 8px 0;
+    font-size: .94rem;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  blockquote.q .qnum {
+    display: inline-block;
+    font-weight: 700;
+    color: var(--ucla-blue);
+    margin-right: 6px;
+  }
+  .miniquote {
+    border-left: 3px solid var(--ucla-gold);
+    background: #fff;
+    margin: 6px 0 6px 8px;
+    padding: 4px 12px;
+    font-size: .86rem;
+    font-style: italic;
+    color: #44505c;
+  }
+  .miniquote .ref {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--ucla-blue);
+    margin-right: 5px;
+  }
+  details.qdrop {
+    margin: 10px 0 2px;
+    font-size: .86rem;
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+  }
+  details.qdrop summary {
+    cursor: pointer;
+    color: var(--ucla-blue);
+    font-weight: 600;
+    list-style: revert;
+  }
+  details.qdrop .qbody {
+    margin-top: 8px;
+    color: var(--muted);
+  }
+  details.qdrop .qbody ul { margin: 4px 0; padding-left: 20px; }
+  details.appendix {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 12px 0;
+    background: var(--bg-soft);
+  }
+  details.appendix > summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--ucla-dark);
+    font-size: 1rem;
+  }
+  details.appendix[open] > summary { margin-bottom: 12px; }
+  .scale-line { color: var(--muted); font-size: .85rem; margin: 4px 0 10px; }
+  .q-item { margin: 10px 0 4px; }
+  .q-item .qid { font-weight: 700; color: var(--ucla-blue); margin-right: 6px; }
+  .q-meta { font-size: .82rem; color: var(--muted); font-style: italic; }
+  .two-col { columns: 2; column-gap: 40px; }
+  @media (max-width: 680px) {
+    header.hero, main { padding-left: 24px; padding-right: 24px; }
+    header.hero h1 { font-size: 1.5rem; }
+    .two-col { columns: 1; }
+  }
+  footer {
+    padding: 24px 56px 40px;
+    color: var(--muted);
+    font-size: .85rem;
+    border-top: 1px solid var(--line);
+  }
+  .print-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1000;
+    background: var(--ucla-blue);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  }
+  .print-btn:hover { background: var(--ucla-dark); }
+  @media print {
+    @page { margin: 14mm; }
+    body { background: #fff; }
+    .page { box-shadow: none; max-width: none; margin: 0; }
+    .print-btn { display: none !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    a { color: inherit; text-decoration: none; }
+    header.hero { padding: 24px 0; }
+    main { padding: 8px 0 0; }
+    footer { padding: 16px 0 0; }
+    h2 { break-after: avoid; }
+    .chart-box, table, blockquote.q, .miniquote, .stat, .note, .callout,
+    details.appendix, details.qdrop, .q-item { break-inside: avoid; page-break-inside: avoid; }
+    /* expand all dropdowns so their content prints */
+    details > summary { color: var(--ucla-dark); }
+    details[open] .chart-wrap { height: 280px; }
+  }
+  .chart-box {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px 10px;
+    margin: 18px 0;
+    background: #fff;
+  }
+  .chart-box .chart-title {
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--ucla-dark);
+    margin-bottom: 12px;
+  }
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .chart-wrap { position: relative; height: 300px; }
+  .chart-wrap.tall { height: 360px; }
+  @media (max-width: 680px) {
+    .chart-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="printReport()">⎙ Print / Save as PDF</button>
+<div class="page">
+  <header class="hero">
+    <p class="kicker">UCLA Teaching and Learning Center · Post-Event Survey</p>
+    <h1>2026 UCLA AI Symposium</h1>
+    <p class="sub"><em>Adapting Instruction in the Age of AI</em></p>
+    <div class="meta">
+      Responses collected June 9–18, 2026 &nbsp;·&nbsp; 50 respondents &nbsp;·&nbsp; Anonymous survey
+    </div>
+  </header>
+
+  <main>
+
+    <h2><span class="num">1</span>Overview</h2>
+    <p class="lead">This report summarizes feedback from the post-event survey for the 2026 UCLA Teaching Symposium (<em>Adapting Instruction in the Age of AI</em>). It covers four areas — the overall experience, the keynote and faculty panel, the concurrent sessions, and the Tech Expo and Social Hour — along with open-ended comments, and is intended to inform future AI-related teaching and learning programming. The headline figures are below.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="big">50</div><div class="label">Total responses</div><div class="detail">Submissions to the post-event survey, collected June 9–18, 2026.</div></div>
+      <div class="stat"><div class="big">49</div><div class="label">Completed (98%)</div><div class="detail">Finished the full survey; only one response was partial.</div></div>
+      <div class="stat"><div class="big">~17%</div><div class="label">Response rate</div><div class="detail">50 of 292 eligible attendees, excluding 33 TLC staff.</div></div>
+      <div class="stat"><div class="big">30</div><div class="label">Written comments</div><div class="detail">Open-ended responses (60% of respondents) in Appendix 1.</div></div>
+      <div class="stat"><div class="big">14</div><div class="label">Divisions / schools</div><div class="detail">Represented across campus, plus ~28 departments.</div></div>
+      <div class="stat"><div class="big">4.6/5</div><div class="label">Top satisfaction item</div><div class="detail">"Content was relevant to my work" — 98% agreed.</div></div>
+    </div>
+    <p class="tablenote"><strong>Response rate:</strong> 50 responses ÷ 292 eligible attendees ≈ 17%. The reconciled attendee total was 325 (176 in-person + 149 Zoom); 33 TLC staff (30 in-person, 3 Zoom) are excluded from the denominator, while presenters and expo partners are retained. Including TLC staff, the rate would be ≈ 15% (50 ÷ 325).</p>
+
+    <div class="note">
+      <strong>Interpretation note — participation mode.</strong> The survey did not record whether respondents attended in person or remotely, yet many joined via Zoom. Results should therefore be read with caution, especially for in-person-only components (see <a href="#methodology">Methodology &amp; Limitations</a>).
+    </div>
+
+    <h2><span class="num">2</span>Who Responded</h2>
+
+    <h3>Primary role at UCLA <span style="color:var(--muted);font-weight:400">(n = 50)</span></h3>
+    <table>
+      <thead><tr><th>Role</th><th class="num">Count</th><th class="barcell">Share</th></tr></thead>
+      <tbody>
+        <tr><td>Faculty: Lecturer, Adjunct, or Clinical series</td><td class="num">14</td><td><span class="bar" style="width:140px"></span></td></tr>
+        <tr><td>Faculty: Regular Professor series</td><td class="num">14</td><td><span class="bar" style="width:140px"></span></td></tr>
+        <tr><td>Staff</td><td class="num">7</td><td><span class="bar" style="width:70px"></span></td></tr>
+        <tr><td>Faculty: Professor of Teaching series</td><td class="num">4</td><td><span class="bar" style="width:40px"></span></td></tr>
+        <tr><td>TA / Graduate Student</td><td class="num">3</td><td><span class="bar" style="width:30px"></span></td></tr>
+        <tr><td>UCLA Extension Instructor</td><td class="num">3</td><td><span class="bar" style="width:30px"></span></td></tr>
+        <tr><td>Academic Administrator / Coordinator</td><td class="num">2</td><td><span class="bar" style="width:20px"></span></td></tr>
+        <tr><td>Other</td><td class="num">2</td><td><span class="bar" style="width:20px"></span></td></tr>
+        <tr><td>Postdoctoral Scholar</td><td class="num">1</td><td><span class="bar" style="width:10px"></span></td></tr>
+      </tbody>
+    </table>
+    <div class="chart-box">
+      <div class="chart-title">Faculty vs. non-faculty</div>
+      <div class="chart-wrap"><canvas id="chartFacultyMix"></canvas></div>
+      <details class="qdrop"><summary>Survey question</summary><div class="qbody"><strong>Q5.</strong> Primary role at UCLA <span class="q-meta">(single-select dropdown: Faculty — Regular Professor series; Faculty — Lecturer, Adjunct, or Clinical series; Faculty — Professor of Teaching series; Postdoctoral Scholar; TA/Graduate Student; Staff; Academic Administrator/Coordinator; Other; UCLA Extension Instructor)</span></div></details>
+    </div>
+    <div class="callout"><p>Faculty constituted the large majority of respondents — <strong>32 of 50 (64%)</strong> across the three faculty series. Staff (7) represented the next largest group, and the three student respondents were all at the doctoral level.</p></div>
+
+    <h3>Primary Division or School <span style="color:var(--muted);font-weight:400">(n = 49; 1 blank)</span></h3>
+    <table>
+      <thead><tr><th>Division / School</th><th class="num">Count</th><th class="barcell">Share</th></tr></thead>
+      <tbody>
+        <tr><td>Life Sciences</td><td class="num">8</td><td><span class="bar" style="width:160px"></span></td></tr>
+        <tr><td>Public Health</td><td class="num">6</td><td><span class="bar" style="width:120px"></span></td></tr>
+        <tr><td>Engineering</td><td class="num">6</td><td><span class="bar" style="width:120px"></span></td></tr>
+        <tr><td>Nursing</td><td class="num">5</td><td><span class="bar" style="width:100px"></span></td></tr>
+        <tr><td>Humanities</td><td class="num">5</td><td><span class="bar" style="width:100px"></span></td></tr>
+        <tr><td>Other</td><td class="num">5</td><td><span class="bar" style="width:100px"></span></td></tr>
+        <tr><td>Medicine</td><td class="num">4</td><td><span class="bar" style="width:80px"></span></td></tr>
+        <tr><td>Dentistry, Social Sciences, UCLA Extension</td><td class="num">2</td><td><span class="bar" style="width:40px"></span></td></tr>
+        <tr><td>Education &amp; Information Studies, Arts and Architecture, Management, Physical Sciences</td><td class="num">1</td><td><span class="bar" style="width:20px"></span></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote">The final two rows group divisions that share the same count; the Count column shows the per-division total (2 or 1), not a sum. <em>Survey question — Q9: Primary Division or School (single-select dropdown of UCLA divisions and schools).</em></p>
+    <p>Respondents represented <strong>14 divisions and schools</strong>, reflecting broad cross-campus participation spanning the STEM disciplines, the health sciences, and the humanities.</p>
+
+    <h3>Department / Academic Program <span style="color:var(--muted);font-weight:400">(n = 47; 3 blank)</span></h3>
+    <p>Responses originated from approximately <strong>28 distinct departments and academic programs</strong>. The most frequently represented were Nursing (6), Community Health Sciences (3), and Psychology (3), while Computer Science, Statistics, Philosophy, Electrical Engineering, Epidemiology, and Dentistry each contributed two respondents. The remaining departments were represented by a single respondent each (for example, Bioengineering, Linguistics, Architecture and Urban Design, English, Sociology, and Education), underscoring the breadth of disciplinary interest in the symposium.</p>
+
+    <h2><span class="num">3</span>Session Attendance</h2>
+    <p>Respondents were able to attend more than one concurrent session, and the corresponding survey item allowed multiple selections. Of the 50 respondents, 32 indicated the session or sessions they attended.</p>
+    <table>
+      <thead><tr><th>Concurrent session</th><th class="num">Attendees</th></tr></thead>
+      <tbody>
+        <tr><td>Round 1: Using AI Tools in the Classroom (Flash Talks)</td><td class="num">16</td></tr>
+        <tr><td>Round 2: Evaluating &amp; Applying AI Tools</td><td class="num">14</td></tr>
+        <tr><td>Round 1: Ethics, Integrity, &amp; Equity (GenAI in Higher Ed)</td><td class="num">13</td></tr>
+        <tr><td>Round 2: Building an AI Ethics Writing Curriculum (Flash Talks)</td><td class="num">6</td></tr>
+        <tr><td>Choose Your Own A(I)dventure Roundtables</td><td class="num">2</td></tr>
+      </tbody>
+    </table>
+    <details class="qdrop"><summary>Survey question</summary><div class="qbody"><strong>Q23.</strong> Concurrent Sessions — Which Session(s) did you attend? <span class="q-meta">(check all that apply)</span><ul><li>Round 1: Ethics, Integrity, &amp; Equity: What Do We Gain &amp; Lose with GenAI in Higher Ed?</li><li>Round 1: Using AI Tools in the Classroom Flash Talks</li><li>Round 2: Evaluating &amp; Applying AI Tools: How to Navigate a Changing Landscape</li><li>Round 2: Building an AI Ethics Writing Curriculum Across Engineering and the Humanities Flash Talks</li><li>Choose Your Own A(I)dventure Roundtables (Rounds 1 or 2)</li></ul></div></details>
+    <p>A notable share of respondents attended <strong>remotely via Zoom</strong>, as confirmed by the open-ended comments. These attendees were necessarily unable to participate in the in-person Tech Expo and Social Hour, a factor that should be considered when interpreting the ratings for those components (see the interpretation note in Section 1).</p>
+
+    <h2><span class="num">4</span>Satisfaction Ratings</h2>
+    <p class="lead">All items use a 5-point agreement scale: 1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Average rating by symposium component (mean, 1–5)</div>
+      <div class="chart-wrap"><canvas id="chartComponents"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody">Each bar averages all rating items within that component (5-point Agreement scale):<ul><li><strong>Overall Experience</strong> — Q21 (4 items)</li><li><strong>Keynote &amp; Panel</strong> — Q22 (3 items)</li><li><strong>Concurrent Sessions</strong> — Q24–Q28 (3 items each, across attended sessions)</li><li><strong>Tech Expo &amp; Social Hour</strong> — Q29 (4 items)</li></ul>Full item wording appears in the dropdowns for each component below and in Appendix 2.</div></details>
+    </div>
+
+    <h3>Overall Symposium Experience <span style="color:var(--muted);font-weight:400">(n = 50)</span></h3>
+    <table>
+      <thead><tr><th>Statement</th><th class="num">Mean</th><th class="num">% Agree</th></tr></thead>
+      <tbody>
+        <tr><td>Content was relevant to my professional interests</td><td class="num"><strong>4.64</strong></td><td class="num"><span class="badge good">98%</span></td></tr>
+        <tr><td>Provided practical ideas/strategies I can apply</td><td class="num">4.28</td><td class="num"><span class="badge good">88%</span></td></tr>
+        <tr><td>Format supported meaningful engagement</td><td class="num">4.24</td><td class="num"><span class="badge good">78%</span></td></tr>
+        <tr><td>Exposed me to perspectives on AI I hadn't considered</td><td class="num">4.18</td><td class="num"><span class="badge good">84%</span></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote"><strong>How metrics are calculated:</strong> <em>Mean</em> is the average rating on the 1–5 scale. <em>% Agree</em> is the "top-2-box" share — the percentage of respondents selecting 4 (Agree) or 5 (Strongly Agree); neutral (3) and disagreement (1–2) are excluded.</p>
+    <p class="tableexplain">Reception was strongly positive across all four items. <strong>Relevance to professional interests</strong> was the standout (mean 4.64; 98% agreement), and the lowest item still sat well above neutral. The gap between the mean and % Agree for <strong>format/engagement</strong> (4.24 mean but 78% agree) reflects a relatively high number of neutral ratings rather than any disagreement.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Overall experience — mean vs. % who agreed (4–5)</div>
+      <div class="chart-wrap"><canvas id="chartOverall"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q21.</strong> Overall Symposium Experience <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The symposium content was relevant to my professional interests and responsibilities.</li><li>The symposium provided practical ideas or strategies that I can apply in my professional practice.</li><li>The symposium format supported meaningful engagement.</li><li>The symposium exposed me to perspectives on AI that I had not previously considered.</li></ul></div></details>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-title">Overall experience — distribution of responses (n = 50)</div>
+      <div class="chart-wrap"><canvas id="chartOverallDist"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q21.</strong> Overall Symposium Experience <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The symposium content was relevant to my professional interests and responsibilities.</li><li>The symposium provided practical ideas or strategies that I can apply in my professional practice.</li><li>The symposium format supported meaningful engagement.</li><li>The symposium exposed me to perspectives on AI that I had not previously considered.</li></ul></div></details>
+    </div>
+
+    <h3>Keynote &amp; Faculty Panel</h3>
+    <table>
+      <thead><tr><th>Statement</th><th class="num">Mean</th><th class="num">% Agree</th></tr></thead>
+      <tbody>
+        <tr><td>Panel prompted reflection on AI in my practice (n=44)</td><td class="num">4.43</td><td class="num"><span class="badge good">95%</span></td></tr>
+        <tr><td>Panelists represented diverse perspectives (n=46)</td><td class="num">4.43</td><td class="num"><span class="badge good">93%</span></td></tr>
+        <tr><td>Keynote prompted reflection on AI in my practice (n=47)</td><td class="num">4.36</td><td class="num"><span class="badge good">87%</span></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote"><strong>How metrics are calculated:</strong> <em>Mean</em> is the average rating on the 1–5 scale. <em>% Agree</em> is the "top-2-box" share — the percentage of respondents selecting 4 (Agree) or 5 (Strongly Agree); neutral (3) and disagreement (1–2) are excluded.</p>
+    <p class="tableexplain">The keynote and panel were very well received, with 87–95% agreement. Respondents particularly valued the <strong>panel's diversity of disciplinary perspectives</strong> and its capacity to prompt reflection on AI in their own practice. Slightly fewer respondents rated the keynote items (n=47) than completed the overall section, consistent with some arriving after it began or attending only remotely.</p>
+
+    <h3>Concurrent Sessions <span style="color:var(--muted);font-weight:400">(mean of 3 items)</span></h3>
+    <table>
+      <thead><tr><th>Session</th><th class="num">n</th><th class="num">Mean</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Round 1: Using AI Tools in the Classroom</td><td class="num">16</td><td class="num"><strong>~4.56</strong></td><td>Highest-rated; 100% found ideas applicable</td></tr>
+        <tr><td>Round 2: Evaluating &amp; Applying AI Tools</td><td class="num">14</td><td class="num">~4.31</td><td>Strong</td></tr>
+        <tr><td>Round 1: Ethics, Integrity, &amp; Equity</td><td class="num">13</td><td class="num">~3.85</td><td>Moderate</td></tr>
+        <tr><td>Round 2: Building an AI Ethics Writing Curriculum</td><td class="num">6</td><td class="num">~3.61</td><td><span class="badge mid">⚠ small sample (n &lt; 10)</span></td></tr>
+        <tr><td>Choose Your Own A(I)dventure Roundtables</td><td class="num">2</td><td class="num">3.50</td><td><span class="badge mid">⚠ small sample (n &lt; 10)</span></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote"><strong>Mean</strong> shown here is the average of the three rating items asked for each session (relevance, new knowledge, and applicability), across the respondents who attended that session (<em>n</em>).</p>
+    <p class="tableexplain">The practical, tool-focused sessions rated highest — <strong>Using AI Tools in the Classroom</strong> led the field (mean ~4.56), with every attendee finding the ideas applicable. The discussion-oriented ethics sessions scored more modestly. The two lowest-rated sessions were each based on fewer than 10 responses, so their averages are not statistically reliable and should be read as indicative only.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Concurrent sessions — mean rating (bubble size ∝ attendees · red outline = small sample, n &lt; 10)</div>
+      <div class="chart-wrap"><canvas id="chartConcurrent"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody">Each attended session (Q24–Q28) asked the same three items <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span>:<ul><li>The concurrent session content was relevant to my instructional needs.</li><li>I gained new knowledge or perspectives from the concurrent session I attended.</li><li>The concurrent session provided ideas or approaches that I can apply in my professional practice.</li></ul></div></details>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-title">Concurrent sessions — response distribution (3 rating items pooled, shown as % of responses)</div>
+      <div class="chart-wrap tall"><canvas id="chartConcurrentDist"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody">Each attended session (Q24–Q28) asked the same three items <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span>:<ul><li>The concurrent session content was relevant to my instructional needs.</li><li>I gained new knowledge or perspectives from the concurrent session I attended.</li><li>The concurrent session provided ideas or approaches that I can apply in my professional practice.</li></ul></div></details>
+    </div>
+    <p class="tablenote">Each bar pools the three rating items for that session (relevance, new knowledge, applicability), so the total number of responses equals 3 × the number of attendees (n). Bars are scaled to 100% to allow comparison across sessions of different sizes; ⚠ marks sessions based on fewer than 10 attendees.</p>
+
+    <details class="qdrop" id="concItemDetails">
+      <summary>Show distribution for each survey question separately (per item, by session)</summary>
+      <div class="qbody">
+        <div class="chart-title" style="margin-top:12px">Item 1 — "The concurrent session content was relevant to my instructional needs." <span class="q-meta">(count of responses)</span></div>
+        <div class="chart-wrap"><canvas id="chartConcItem1"></canvas></div>
+        <div class="chart-title" style="margin-top:18px">Item 2 — "I gained new knowledge or perspectives from the concurrent session I attended." <span class="q-meta">(count of responses)</span></div>
+        <div class="chart-wrap"><canvas id="chartConcItem2"></canvas></div>
+        <div class="chart-title" style="margin-top:18px">Item 3 — "The concurrent session provided ideas or approaches that I can apply in my professional practice." <span class="q-meta">(count of responses)</span></div>
+        <div class="chart-wrap"><canvas id="chartConcItem3"></canvas></div>
+      </div>
+    </details>
+
+    <h3>Tech Expo &amp; Social Hour <span style="color:var(--muted);font-weight:400">(n ≈ 23–24)</span></h3>
+    <table>
+      <thead><tr><th>Statement</th><th class="num">Mean</th><th class="num">% Agree</th></tr></thead>
+      <tbody>
+        <tr><td>Helped identify campus partners/programs/services</td><td class="num">4.04</td><td class="num"><span class="badge mid">65%</span></td></tr>
+        <tr><td>Networking opportunities (Tech Expo)</td><td class="num">3.96</td><td class="num"><span class="badge mid">65%</span></td></tr>
+        <tr><td>Social Hour networking opportunities</td><td class="num">3.92</td><td class="num"><span class="badge mid">58%</span></td></tr>
+        <tr><td>Better sense of AI developments for teaching</td><td class="num">3.87</td><td class="num"><span class="badge mid">57%</span></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote"><strong>How metrics are calculated:</strong> <em>Mean</em> is the average rating on the 1–5 scale. <em>% Agree</em> is the "top-2-box" share — the percentage of respondents selecting 4 (Agree) or 5 (Strongly Agree); neutral (3) and disagreement (1–2) are excluded.</p>
+    <p class="tableexplain">Ratings here are shaped largely by participation mode: because this is an in-person-only activity, the substantial share of respondents who attended remotely could not take part, and their responses register as <strong>neutral</strong> rather than as disagreement (see Section 1). Among those who did attend, the responses were positive, and the item on helping attendees <strong>identify campus partners and services</strong> was especially well received. These figures are therefore best read as a reflection of attendance mix rather than of the activity itself.</p>
+    <p class="tablenote"><strong>Important measurement caveat:</strong> unlike the concurrent-session questions (which were shown only to attendees via skip-logic), this question was presented to <em>all</em> respondents with no attendance filter, and the survey never asked about participation mode. Only 24 of 50 respondents answered it (26 left it blank). Because we cannot confirm which respondents actually attended the Expo in person, these results may not be fully accurate and should be treated as indicative only.</p>
+    <div class="chart-box">
+      <div class="chart-title">Tech Expo &amp; Social Hour — mean rating (1–5)</div>
+      <div class="chart-wrap"><canvas id="chartExpo"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q29.</strong> Tech Expo and Social Hour <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The Tech Expo helped me identify campus partners, programs, or services that could support my work.</li><li>The Tech Expo provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Social Hour provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Tech Expo provided me with a better sense of AI developments to support teaching and learning at UCLA.</li></ul></div></details>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Tech Expo &amp; Social Hour — distribution of responses (n ≈ 23–24)</div>
+      <div class="chart-wrap"><canvas id="chartExpoDist"></canvas></div>
+      <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q29.</strong> Tech Expo and Social Hour <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The Tech Expo helped me identify campus partners, programs, or services that could support my work.</li><li>The Tech Expo provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Social Hour provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Tech Expo provided me with a better sense of AI developments to support teaching and learning at UCLA.</li></ul></div></details>
+    </div>
+    <p>Ratings for the Tech Expo and Social Hour should be interpreted primarily in light of participation mode: a substantial proportion of respondents attended remotely and could not take part in this in-person activity (see Section 1), so their responses appear as <em>neutral</em> rather than as disagreement. Among attendees who did participate, responses were positive. Several respondents also offered constructive logistical suggestions, which are summarized in the open-ended feedback below.</p>
+
+    <h2><span class="num">5</span>Open-Ended Feedback <span style="color:var(--muted);font-weight:400;font-size:1rem">(30 comments)</span></h2>
+
+    <p>Thirty respondents provided written comments. The principal themes are summarized below, followed by the complete set of verbatim responses.</p>
+
+    <p class="tablenote">Supporting quotes are reproduced verbatim; the number refers to the corresponding entry in Appendix 1.</p>
+
+    <h3 style="color:var(--good)">Strengths</h3>
+
+    <p class="q-item"><strong>Practical, applicable content.</strong> Respondents valued exposure to new tools and instructional approaches that they could apply directly in their teaching.</p>
+    <div class="miniquote"><span class="ref">#1</span>"The symposium provided valuable insight into practical strategies for integrating AI into my teaching. I even learned about new modalities that I did not know about."</div>
+    <div class="miniquote"><span class="ref">#4</span>"I also appreciated learning about and speaking with the vendors - excellent information was shared and I look forward to using the tools that were shared."</div>
+    <div class="miniquote"><span class="ref">#13</span>"I learned a lot. I especially appreciated the rigor and assessment that was presented in the flash talks."</div>
+
+    <p class="q-item"><strong>Cross-disciplinary engagement.</strong> Many appreciated the opportunity to connect with colleagues from other departments who share an interest in teaching.</p>
+    <div class="miniquote"><span class="ref">#3</span>"What I also deeply appreciated about the event was that it brought together faculty interested in teaching. At a research university that's often a secondary focus. … I felt uplifted by the day."</div>
+    <div class="miniquote"><span class="ref">#5</span>"The lunchtable conversation (not just Tao) was the best part of the whole symposium."</div>
+    <div class="miniquote"><span class="ref">#18</span>"I was able to connect with other people from different departments."</div>
+
+    <p class="q-item"><strong>Keynote and panel.</strong> These sessions were repeatedly praised as excellent and intellectually substantive, including by those who attended remotely.</p>
+    <div class="miniquote"><span class="ref">#22</span>"I participated via zoom for the keynote and the panel. Each of these sessions were excellent for different reasons. … These were compelling and thoughtful."</div>
+    <div class="miniquote"><span class="ref">#6</span>"The zoom-available panel was very good, full of insights and actionable ideas for the classroom, and assignments, and assessments."</div>
+
+    <p class="q-item"><strong>Event organization.</strong> Respondents commended the quality of the organization and the professionalism and warmth of the TLC staff.</p>
+    <div class="miniquote"><span class="ref">#1</span>"The TLC staff was exceptionally welcoming, professional and supportive. I thought the event was remarkably well organized."</div>
+    <div class="miniquote"><span class="ref">#16</span>"This symposium was very organized. Thank you for inviting knowledgeable, innovative, and a diverse panel of speakers."</div>
+
+    <p class="q-item"><strong>Emphasis on faculty expertise.</strong> Several respondents welcomed the event's grounding in faculty voices and expressed hope that the TLC would offer similar programming in the future.</p>
+    <div class="miniquote"><span class="ref">#12</span>"I appreciated that this event drew on faculty expertise and faculty voices. Really helpful insights were shared. I hope that the TLC will view this as model a success and do more of it in the future."</div>
+    <div class="miniquote"><span class="ref">#29</span>"Very helpful to hear the perspectives and vision of those who are already using AI thoughtfully in their teaching."</div>
+
+    <h3 style="color:var(--warn)">Suggestions and Areas for Improvement</h3>
+
+    <p class="q-item"><strong>Tech Expo logistics.</strong> Respondents offered suggestions on signage, timing, follow-up, and the social framing of the Expo.</p>
+    <div class="miniquote"><span class="ref">#18</span>"The Tech Expo felt too short to visit all the stations meaningfully. It would be very helpful to receive a list of stations in advance … While QR codes were provided for follow-up, I'd prefer to have my questions answered on the spot at the expo itself, rather than being redirected to external websites."</div>
+    <div class="miniquote"><span class="ref">#12</span>"The booths were not sufficiently signposted / set off from the general mingling space. The presence of alcohol also made it feel more 'social' than 'tech'."</div>
+
+    <p class="q-item"><strong>Panel format.</strong> Several respondents expressed a desire for more direct discussion and debate among panelists, as well as additional time for audience questions.</p>
+    <div class="miniquote"><span class="ref">#19</span>"For panel, I would have like to hear the panelists have a discussion and debate. The ask question/answer misses out on dynamic exchanges which often lead to new insights and perspectives."</div>
+    <div class="miniquote"><span class="ref">#30</span>"The two panels would have benefitted from a little more time for audience Q&amp;A."</div>
+
+    <p class="q-item"><strong>Balance of perspectives.</strong> A respondent suggested including critical or non-adopting voices alongside enthusiastic adopters.</p>
+    <div class="miniquote"><span class="ref">#27</span>"I wish that the first panel included critical non-users of AI. It felt very pro-AI. Also, the panel raised many issues with the application of AI in higher education."</div>
+    <div class="miniquote"><span class="ref">#14</span>"I think someone should have made the point that we have to teach students to be experts in something before the students can meaningfully engage a GenAI."</div>
+
+    <p class="q-item"><strong>Remote access and resources.</strong> A number of respondents participated only via Zoom; some wished for an in-person option, and several requested that session summaries and related resources be shared afterward.</p>
+    <div class="miniquote"><span class="ref">#20</span>"I was only invited to the online Zoom kickoff which I very much enjoyed. I would have liked to have the option to attend in person."</div>
+    <div class="miniquote"><span class="ref">#22</span>"Will you all be sharing out summaries of these sessions and/or related resources?"</div>
+
+    <p class="q-item"><strong>Future programming.</strong> Suggestions included hands-on sessions, a focus on assessment, inclusion of the student perspective, and follow-up events.</p>
+    <div class="miniquote"><span class="ref">#23</span>"It would be lovely if the second session (or a second day) was a practical course on syllabus writing/lesson plans and demonstrations of tools in the classroom."</div>
+    <div class="miniquote"><span class="ref">#30</span>"It also would have been interesting to have one or two undergraduate students offer their candid perspectives on how they and their classmates are using AI in their studies."</div>
+    <div class="miniquote"><span class="ref">#24</span>"I think a future event could include sessions on helping students avoid generative AI and chat bots …"</div>
+
+    <p class="q-item"><strong>Scheduling.</strong> One respondent requested that future symposia be held on Wednesdays.</p>
+    <div class="miniquote"><span class="ref">#18</span>"Please hold this again on Wednesdays if future symposiums will be held."</div>
+
+    <p class="tablenote">The complete set of 30 verbatim comments is provided in <a href="#appendix1">Appendix 1</a> at the end of this report.</p>
+
+    <h2><span class="num">6</span>Key Takeaways</h2>
+    <ol>
+      <li><strong>The symposium was very well received overall.</strong> Ratings for relevance (mean 4.64) and applicability (mean 4.28) were particularly strong, with 98% of respondents agreeing that the content was relevant to their professional work.</li>
+      <li><strong>The respondent pool was predominantly faculty (64%) and broadly cross-campus,</strong> spanning 14 divisions and approximately 28 departments — evidence of wide institutional interest.</li>
+      <li><strong>Practical, applied sessions outperformed broader discussion sessions,</strong> indicating a clear appetite for concrete, classroom-ready strategies.</li>
+      <li><strong>Tech Expo and Social Hour ratings largely reflect participation mode</strong> rather than the activity itself: as an in-person-only offering, it could not be experienced by the many respondents who attended remotely, whose responses register as neutral (see Section 1).</li>
+      <li><strong>There is demonstrated demand for follow-up programming,</strong> including hands-on workshops, shared resources, a wider range of perspectives, and greater inclusion of the student voice.</li>
+    </ol>
+
+    <h2 id="methodology"><span class="num">7</span>Methodology and Limitations</h2>
+    <p>The analysis is based on 50 survey responses, of which 49 were complete. Ratings for the keynote and panel, the concurrent sessions, and the Tech Expo and Social Hour reflect smaller sub-samples (n = 2–24), as not all respondents attended every component. Means derived from fewer than 10 respondents — flagged in the corresponding charts and tables — should be interpreted with particular caution.</p>
+    <p><strong>Response rate.</strong> The reconciled attendee count was 325 (176 in-person and 149 via Zoom). Excluding TLC staff — 30 in-person and 3 on Zoom (33 total) — leaves 292 eligible attendees, yielding a response rate of approximately <strong>17%</strong> (50 ÷ 292). Presenters and expo partners (44 in-person) are retained in this figure; if they were also excluded, the eligible base would be smaller and the rate correspondingly higher. Including TLC staff, the rate would be approximately 15% (50 ÷ 325).</p>
+    <p>The most significant limitation concerns <strong>participation mode</strong>. The survey did not ask whether respondents attended in person or remotely, and remote participation was not anticipated during the survey's design. Because remote and partial-day attendees experience the symposium differently from full-day, in-person attendees — and cannot participate in certain components at all — the combined results may present a skewed or biased picture of the overall experience. Future iterations of the survey should include an explicit question on participation mode, and ideally on the portion of the event attended, to enable accurate segmentation and comparison of results.</p>
+
+    <h2 id="appendix1"><span class="num">A1</span>Appendix 1 — Verbatim Comments</h2>
+    <details class="appendix">
+      <summary>Show all 30 verbatim comments (reproduced exactly as submitted)</summary>
+      <div class="quotes">
+        <blockquote class="q"><span class="qnum">1.</span>The symposium provided valuable insight into practical strategies for integrating AI into my teaching. I even learned about new modalities that I did not know about. The symposium provided a great opportunity to connect with colleagues from different departments and hear about their experiences. I also appreciated the innovation showcased by the vendors. The TLC staff was exceptionally welcoming, professional and supportive. I thought the event was remarkably well organized. Than you!</blockquote>
+        <blockquote class="q"><span class="qnum">2.</span>Attended webinar, so no tech demo</blockquote>
+        <blockquote class="q"><span class="qnum">3.</span>What I also deeply appreciated about the event was that it brought together faculty interested in teaching. At a research university that's often a secondary focus. I was heartened to see many familiar faces. I felt uplifted by the day.</blockquote>
+        <blockquote class="q"><span class="qnum">4.</span>I enjoyed the format of the conference with keynote speakers and the breakout sessions. I also appreciated learning about and speaking with the vendors - excellent information was shared and I look forward to using the tools that were shared.</blockquote>
+        <blockquote class="q"><span class="qnum">5.</span>I could attend only the morning sessions and lunch. I lucked out at lunch, as Professor Tao happened to decide to sit next to me. The lunchtable conversation (not just Tao) was the best part of the whole symposium.</blockquote>
+        <blockquote class="q"><span class="qnum">6.</span>I was watching on zoom, so didn't participate in some of the activities. The zoom-available panel was very good, full of insights and actionable ideas for the classroom, and assignments, and assessments.
+
+Thanks,
+Sherri</blockquote>
+        <blockquote class="q"><span class="qnum">7.</span>I had to leave early and was not able to attend the Tech Expo and Social Hour.</blockquote>
+        <blockquote class="q"><span class="qnum">8.</span>I enjoyed the event, especially the opportunity to talk to other educators who are concerned about the ubiquity of 'AI' in educational technology.</blockquote>
+        <blockquote class="q"><span class="qnum">9.</span>I was only able to attend the online portion of the event but I appreciated being able to listen to instructors and various perspectives on this topic.</blockquote>
+        <blockquote class="q"><span class="qnum">10.</span>I was unfortunately unable to make the keystone or tech expo. Thank you for putting on this event!</blockquote>
+        <blockquote class="q"><span class="qnum">11.</span>It's difficult to plan an event for a wide-range of learners and an ever-evolving topic. Thank you for the opportunity to learn alongside a diverse set of colleagues.</blockquote>
+        <blockquote class="q"><span class="qnum">12.</span>I appreciated that this event drew on faculty expertise and faculty voices. Really helpful insights were shared. I hope that the TLC will view this as model a success and do more of it in the future.
+
+The tech expo / social hour was well intentioned, but I think spatial issues kept it from succeeding as much as it could have. Specifically, the booths were not sufficiently signposted / set off from the general mingling space. The presence of alcohol also made it feel more 'social' than 'tech' (I drink, so this is no slight, just a subjective organizational observation).</blockquote>
+        <blockquote class="q"><span class="qnum">13.</span>Thanks for holding this event.  I learned a lot.  I especially appreciated the rigor and assessment that was presented in the flash talks.  With AI tools, a question that is top of mind is the assessment and evaluation.</blockquote>
+        <blockquote class="q"><span class="qnum">14.</span>I think someone should have made the point that we have to teach students to be experts in something before the students can meaningfully engage a GenAI.  How can they possibly evaluate the work on a GenAI if they do not have expertise to evaluate what the GenAI or another students in field has done.</blockquote>
+        <blockquote class="q"><span class="qnum">15.</span>I thought that the information and view expressed were 'world class'.  I definitely got ideas for the classroom and businesses in general.
+FYI:  I was co-author of a paper on AI Governance, which was presented at the Western Data Science Institute in April and I am working on additional papers as well.</blockquote>
+        <blockquote class="q"><span class="qnum">16.</span>This symposium was very organized. Thank you for inviting knowledgeable, innovative, and a diverse panel of speakers.</blockquote>
+        <blockquote class="q"><span class="qnum">17.</span>I attended the session virtually, so could not participate in the tech expo and social hour. However, the content of the presentations was informative and helpful. Thank you to TLC for organizing this!</blockquote>
+        <blockquote class="q"><span class="qnum">18.</span>I really enjoyed this symposium. I am glad that I attended in person rather than zoom. I was able to connect with other people  from different departments. Please hold this again on Wednesdays if future symposiums will be held. 
+
+The Tech Expo felt too short to visit all the stations meaningfully. It would be very helpful to receive a list of stations in advance so attendees can prioritize which ones to visit first. Having this available during breaks would also improve the flow.
+
+While QR codes were provided for follow-up, I'd prefer to have my questions answered on the spot at the expo itself, rather than being redirected to external websites.</blockquote>
+        <blockquote class="q"><span class="qnum">19.</span>For panel, I would have like to hear the panelists have a discussion and debate. The ask question/answer misses out on dynamic exchanges which often lead to new insights and perspectives.</blockquote>
+        <blockquote class="q"><span class="qnum">20.</span>I was only invited to the online Zoom kickoff which I very much enjoyed. I would have liked to have the option to attend in person.</blockquote>
+        <blockquote class="q"><span class="qnum">21.</span>Sorry, couldn't attend.</blockquote>
+        <blockquote class="q"><span class="qnum">22.</span>I participated via zoom for the keynote and the panel. Each of these sessions were excellent for different reasons. I thoroughly enjoyed hearing each speaker's perspectives as well as their specific applications for AI in the classroom. These were compelling and thoughtful. Will you all be sharing out summaries of these sessions and/or related resources? Thank you for a stimulating session!</blockquote>
+        <blockquote class="q"><span class="qnum">23.</span>It would be lovely if the second session (or a second day) was a practical course on syllabus writing/lesson plans and demonstrations of tools in the classroom.</blockquote>
+        <blockquote class="q"><span class="qnum">24.</span>I think a future event could include sessions on helping students avoid generative AI and chat bots, as they have been infiltrating every aspect of our online lives. How do we as educators prepare students to live, work, and create in the future world's technology (which may not be as different from the current world as some companies would like us to believe), while remaining critical of it? The best I can do in the Library, for now, is remind everyone I talk to that our Ask Us chat is still staffed by real human research experts. Thanks!</blockquote>
+        <blockquote class="q"><span class="qnum">25.</span>I participated remotely -- only in the morning session</blockquote>
+        <blockquote class="q"><span class="qnum">26.</span>Thanks for organizing it and hope there's a follow up in a few months.</blockquote>
+        <blockquote class="q"><span class="qnum">27.</span>I wish that the first panel included critical non-users of AI. It felt very pro-AI. Also, the panel raised many issues with the application of AI in higher education.</blockquote>
+        <blockquote class="q"><span class="qnum">28.</span>Was only able to join virtually so cannot comment on expo/social hour</blockquote>
+        <blockquote class="q"><span class="qnum">29.</span>Just an excellent event overall - very helpful to hear the perspectives and vision of those who are already using AI thoughtfully in their teaching. I would attend more events like this because I feel like there's always something new or something I hadn't though about being presented.</blockquote>
+        <blockquote class="q"><span class="qnum">30.</span>The two panels would have benefitted from a little more time for audience Q&amp;A.
+
+It also would have been interesting to have one or two undergraduate students offer their candid perspectives on how they and their classmates are using AI in their studies, and any issues/concerns they have.</blockquote>
+      </div>
+    </details>
+
+    <h2 id="appendix2"><span class="num">A2</span>Appendix 2 — Survey Instrument</h2>
+    <details class="appendix">
+      <summary>Show the full survey questions</summary>
+      <div>
+        <p class="q-meta">Source: 2026 AI Symposium — Post-Event Survey. Items shown in the order presented; matrix items used a 5-point Agreement scale (1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree). "Display" notes indicate conditional (skip-logic) questions.</p>
+
+        <p class="q-item" style="font-style:italic;color:var(--muted)">Introduction: "Thank you for participating in the UCLA Teaching Symposium: Adapting Instruction in the Age of AI! Your feedback will help the TLC understand your experience and provide valuable input to the future development of AI-related events and resources for teaching and learning."</p>
+
+        <h3>Respondent background</h3>
+        <p class="q-item"><span class="qid">Q5.</span>Primary role at UCLA <span class="q-meta">(single-select dropdown)</span></p>
+        <div class="qbody"><ul><li>Faculty: Regular Professor series</li><li>Faculty: Lecturer, Adjunct, or Clinical series</li><li>Faculty: Professor of Teaching series</li><li>Postdoctoral Scholar</li><li>TA/Graduate Student</li><li>Staff</li><li>Academic Administrator/Coordinator</li><li>Other</li><li>UCLA Extension Instructor</li></ul></div>
+        <p class="q-item"><span class="qid">Q5a.</span>If "Other," please provide your role/title: <span class="q-meta">(text; display if Q5 = Other)</span></p>
+        <p class="q-item"><span class="qid">Q22.</span>Program Type: <span class="q-meta">(dropdown: Master's … Other; display if Q5 = TA/Graduate Student)</span></p>
+        <p class="q-item"><span class="qid">Q23.</span>If "Other," please provide Student Type: <span class="q-meta">(text; display if Program Type = Other)</span></p>
+        <p class="q-item"><span class="qid">Q9.</span>Primary Division or School <span class="q-meta">(single-select dropdown: Arts and Architecture … Office of the Vice Provost for Teaching and Learning)</span></p>
+        <p class="q-item"><span class="qid">Q9a.</span>If "Other," please provide Division or School name: <span class="q-meta">(text; display if Q9 = Other)</span></p>
+        <p class="q-item"><span class="qid">Q6.</span>Primary Department or Academic Program <span class="q-meta">(dropdown; display if Q9 ≠ UCLA Extension)</span></p>
+        <p class="q-item"><span class="qid">Q20.</span>UCLA Extension Academic Program <span class="q-meta">(dropdown; display if Q9 = UCLA Extension)</span></p>
+        <p class="q-item"><span class="qid">Q6a.</span>If "Other," please provide Department or Academic Program name: <span class="q-meta">(text; display if Q6 = Other or Q20 = Other)</span></p>
+
+        <h3>Q21 — Overall Symposium Experience <span class="q-meta">(matrix, 1–5)</span></h3>
+        <div class="qbody"><ul><li>The symposium exposed me to perspectives on AI that I had not previously considered.</li><li>The symposium content was relevant to my professional interests and responsibilities.</li><li>The symposium provided practical ideas or strategies that I can apply in my professional practice.</li><li>The symposium format supported meaningful engagement.</li></ul></div>
+
+        <h3>Q22 — Keynote and Faculty Panel <span class="q-meta">(matrix, 1–5)</span></h3>
+        <div class="qbody"><ul><li>The keynote prompted me to reflect on the future role of AI within my own professional practice (e.g., instruction, research).</li><li>The panel prompted me to reflect on the future role of AI within my own professional practice (e.g., instruction, research).</li><li>The panelists represented a diverse range of disciplinary perspectives that enriched the discussion.</li></ul></div>
+
+        <h3>Q23 — Concurrent Sessions: Which Session(s) did you attend? <span class="q-meta">(check all that apply)</span></h3>
+        <div class="qbody"><ul><li>Round 1: Ethics, Integrity, &amp; Equity: What Do We Gain &amp; Lose with GenAI in Higher Ed?</li><li>Round 1: Using AI Tools in the Classroom Flash Talks</li><li>Round 2: Evaluating &amp; Applying AI Tools: How to Navigate a Changing Landscape</li><li>Round 2: Building an AI Ethics Writing Curriculum Across Engineering and the Humanities Flash Talks</li><li>Choose Your Own A(I)dventure Roundtables (Rounds 1 or 2)</li></ul></div>
+
+        <h3>Q24–Q28 — Session feedback <span class="q-meta">(matrix, 1–5; one block per attended session, shown conditionally)</span></h3>
+        <p class="q-meta">Q24 = Round 1 Ethics; Q25 = Round 1 Using AI Tools; Q26 = Round 2 Evaluating &amp; Applying; Q27 = Round 2 AI Ethics Writing; Q28 = Choose Your Own A(I)dventure. Each block asked the same three items:</p>
+        <div class="qbody"><ul><li>The concurrent session content was relevant to my instructional needs.</li><li>I gained new knowledge or perspectives from the concurrent session I attended.</li><li>The concurrent session provided ideas or approaches that I can apply in my professional practice.</li></ul></div>
+
+        <h3>Q29 — Tech Expo and Social Hour <span class="q-meta">(matrix, 1–5)</span></h3>
+        <div class="qbody"><ul><li>The Tech Expo provided me with a better sense of AI developments to support teaching and learning at UCLA.</li><li>The Tech Expo provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Tech Expo helped me identify campus partners, programs, or services that could support my work.</li><li>The Social Hour provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li></ul></div>
+
+        <h3>Q14 — Open-ended</h3>
+        <div class="qbody"><p>Please share any additional feedback about the event. <span class="q-meta">(free text)</span></p></div>
+      </div>
+    </details>
+
+  </main>
+
+  <footer>
+    Prepared from <code>2026_dataset.csv</code> (responses) and <code>2026_questions.docx</code> (survey instrument). UCLA Teaching and Learning Center — 2026 AI Symposium Post-Event Survey.
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const BLUE='#2774AE', DARK='#003B5C', GOLD='#FFD100', MUTED='#5a6672';
+  const BAR='#003B5C'; // single consistent color for all non-stacked bar charts
+  const PALETTE=['#003B5C','#005587','#8BB8E8','#2774AE','#FFB81C','#FFC72C','#577590'];
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+  Chart.defaults.color = '#1f2933';
+  const noLegend = { plugins:{ legend:{ display:false } } };
+
+  // 2. Faculty mix (doughnut)
+  new Chart(document.getElementById('chartFacultyMix'), {
+    type:'doughnut',
+    data:{ labels:['Faculty (64%, n=32)','Staff (14%, n=7)','Students (6%, n=3)','Extension Instr. (6%, n=3)','Admin (4%, n=2)','Other (4%, n=2)','Postdoc (2%, n=1)'],
+      datasets:[{ data:[32,7,3,3,2,2,1], backgroundColor:PALETTE, borderColor:'#fff', borderWidth:2 }] },
+    options:{ maintainAspectRatio:false,
+      plugins:{ legend:{ position:'right', labels:{ boxWidth:12, font:{size:11} } },
+        tooltip:{ callbacks:{ label:(c)=> c.label.split(' (')[0]+': '+Math.round(c.parsed/50*100)+'% (n='+c.parsed+')' } } } }
+  });
+
+  // 5. Component comparison (mean)
+  new Chart(document.getElementById('chartComponents'), {
+    type:'bar',
+    data:{ labels:['Overall Experience','Keynote & Panel','Concurrent (avg attended)','Tech Expo / Social Hour'],
+      datasets:[{ label:'Mean rating', data:[4.34,4.41,4.18,3.95],
+        backgroundColor:BAR, borderRadius:4 }] },
+    options:{ maintainAspectRatio:false, ...noLegend,
+      scales:{ y:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } } } }
+  });
+
+  // 6. Overall experience: mean + %agree (dual axis)
+  new Chart(document.getElementById('chartOverall'), {
+    type:'bar',
+    data:{ labels:['Relevant to my work','Practical ideas to apply','Format/engagement','New perspectives'],
+      datasets:[
+        { label:'Mean (1–5)', data:[4.64,4.28,4.24,4.18], backgroundColor:BAR, borderRadius:4, yAxisID:'y' },
+        { label:'% Agree (4–5)', data:[98,88,78,84], type:'line', borderColor:'#FFB81C', backgroundColor:'#FFB81C', tension:.3, yAxisID:'y1', pointRadius:4 }
+      ] },
+    options:{ maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top' } },
+      scales:{
+        y:{ min:1, max:5, position:'left', title:{ display:true, text:'Mean' } },
+        y1:{ beginAtZero:true, max:100, position:'right', grid:{ drawOnChartArea:false }, title:{ display:true, text:'% Agree' } }
+      } }
+  });
+
+  // 6b. Overall experience — distribution stacked bar (counts of 1–5)
+  const LIKERT_COLORS = ['#003B5C','#005587','#8BB8E8','#FFB81C','#FFC72C']; // 1→5: darkest blue … darker gold
+  const LIKERT_LABELS = ['1 Strongly Disagree','2 Disagree','3 Neutral','4 Agree','5 Strongly Agree'];
+  // rows ordered to match the report table (top = highest mean)
+  const distItems = ['Relevant to my work (4.64)','Practical ideas to apply (4.28)','Format/engagement (4.24)','New perspectives (4.18)'];
+  const distData = [
+    [0,0,1,16,33],  // Q21_2 relevant
+    [0,0,6,24,20],  // Q21_3 practical
+    [0,0,11,16,23], // Q21_4 format
+    [0,2,6,23,19]   // Q21_1 new perspectives
+  ];
+  new Chart(document.getElementById('chartOverallDist'), {
+    type:'bar',
+    data:{ labels:distItems,
+      datasets: LIKERT_LABELS.map((lab,i)=>({
+        label:lab,
+        data:distData.map(r=>r[i]),
+        backgroundColor:LIKERT_COLORS[i],
+        borderWidth:0
+      })) },
+    options:{ indexAxis:'y', maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+        tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+' ('+Math.round(c.parsed.x/50*100)+'%)' } } },
+      scales:{ x:{ stacked:true, beginAtZero:true, max:50, title:{ display:true, text:'Number of respondents' } },
+        y:{ stacked:true } } }
+  });
+
+  // 7. Concurrent sessions (bubble: x=mean, size=attendees); red outline = small sample n<10
+  const SMALL='#bc4749';
+  new Chart(document.getElementById('chartConcurrent'), {
+    type:'bubble',
+    data:{ datasets:[
+      { label:'Using AI Tools (n=16)', data:[{x:4.56,y:5,r:18}], backgroundColor:'#003B5C' },
+      { label:'Evaluating & Applying (n=14)', data:[{x:4.31,y:4,r:16}], backgroundColor:'#005587' },
+      { label:'Ethics, Integrity & Equity (n=13)', data:[{x:3.85,y:3,r:15}], backgroundColor:'#8BB8E8' },
+      { label:'⚠ AI Ethics Writing (n=6, small)', data:[{x:3.61,y:2,r:10}], backgroundColor:'#FFB81C', borderColor:SMALL, borderWidth:3 },
+      { label:'⚠ Choose Your Own A(I)dventure (n=2, small)', data:[{x:3.50,y:1,r:7}], backgroundColor:'#FFC72C', borderColor:SMALL, borderWidth:3 }
+    ] },
+    options:{ maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+        tooltip:{ callbacks:{ label:(c)=> c.dataset.label.replace('⚠ ','')+' — mean '+c.parsed.x } } },
+      scales:{ x:{ min:1, max:5, title:{ display:true, text:'Mean rating (1–5)' } },
+        y:{ display:false, min:0, max:6 } } }
+  });
+
+  // 7b. Tech Expo — distribution stacked bar (counts of 1–5), ordered by mean
+  const expoItems = ['Identify campus partners (4.04)','Tech Expo networking (3.96)','Social Hour networking (3.92)','Sense of AI developments (3.87)'];
+  const expoData = [
+    [0,1,7,5,10],  // Q29_3 identify partners (n=23)
+    [0,0,8,8,7],   // Q29_2 expo networking (n=23)
+    [0,1,9,5,9],   // Q29_4 social hour networking (n=24)
+    [0,0,10,6,7]   // Q29_1 sense of AI dev (n=23)
+  ];
+  const expoTotals = expoData.map(r=>r.reduce((a,b)=>a+b,0));
+  new Chart(document.getElementById('chartExpoDist'), {
+    type:'bar',
+    data:{ labels:expoItems,
+      datasets: LIKERT_LABELS.map((lab,i)=>({
+        label:lab,
+        data:expoData.map(r=>r[i]),
+        backgroundColor:LIKERT_COLORS[i],
+        borderWidth:0
+      })) },
+    options:{ indexAxis:'y', maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+        tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+' ('+Math.round(c.parsed.x/expoTotals[c.dataIndex]*100)+'%)' } } },
+      scales:{ x:{ stacked:true, beginAtZero:true, title:{ display:true, text:'Number of respondents' } },
+        y:{ stacked:true } } }
+  });
+
+  // 7c. Concurrent sessions — response distribution (pooled 3 items), percent-stacked
+  const concItems = ['Using AI Tools (n=16)','Evaluating & Applying (n=14)','Ethics, Integrity & Equity (n=13)','⚠ Building AI Ethics Writing (n=6)','⚠ Choose Your Own A(I)dventure (n=2)'];
+  const concData = [
+    [0,0,2,17,29], // Using AI Tools (total 48)
+    [0,3,2,16,21], // Evaluating & Applying (total 42)
+    [0,4,6,21,8],  // Ethics, Integrity & Equity (total 39)
+    [0,3,5,6,4],   // Building AI Ethics Writing (total 18)
+    [0,0,3,3,0]    // Choose Your Own (total 6)
+  ];
+  const concTotals = concData.map(r=>r.reduce((a,b)=>a+b,0));
+  new Chart(document.getElementById('chartConcurrentDist'), {
+    type:'bar',
+    data:{ labels:concItems,
+      datasets: LIKERT_LABELS.map((lab,i)=>({
+        label:lab,
+        data:concData.map((r,ri)=> +(r[i]/concTotals[ri]*100).toFixed(1)),
+        rawCounts:concData.map(r=>r[i]),
+        backgroundColor:LIKERT_COLORS[i],
+        borderWidth:0
+      })) },
+    options:{ indexAxis:'y', maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+        tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+'% ('+c.dataset.rawCounts[c.dataIndex]+' responses)' } } },
+      scales:{ x:{ stacked:true, beginAtZero:true, max:100, title:{ display:true, text:'% of responses' } },
+        y:{ stacked:true } } }
+  });
+
+  // 7d. Concurrent sessions — per-item distribution (rendered lazily when dropdown opens)
+  function buildConcItemCharts(){
+    const sessLabels = ['Using AI Tools (n=16)','Evaluating & Applying (n=14)','Ethics, Integrity & Equity (n=13)','⚠ Building AI Ethics Writing (n=6)','⚠ Choose Your Own A(I)dventure (n=2)'];
+    const item1 = [[0,0,1,7,8],[0,1,1,5,7],[0,1,2,8,2],[0,1,2,2,1],[0,0,1,1,0]]; // content relevant
+    const item2 = [[0,0,1,5,10],[0,1,0,6,7],[0,2,1,7,3],[0,1,1,3,1],[0,0,1,1,0]]; // new knowledge
+    const item3 = [[0,0,0,5,11],[0,1,1,5,7],[0,1,3,6,3],[0,1,2,1,2],[0,0,1,1,0]]; // applicable
+    [['chartConcItem1',item1],['chartConcItem2',item2],['chartConcItem3',item3]].forEach(function(pair){
+      new Chart(document.getElementById(pair[0]), {
+        type:'bar',
+        data:{ labels:sessLabels,
+          datasets: LIKERT_LABELS.map((lab,i)=>({ label:lab, data:pair[1].map(r=>r[i]), backgroundColor:LIKERT_COLORS[i], borderWidth:0 })) },
+        options:{ indexAxis:'y', maintainAspectRatio:false,
+          plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+            tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x } } },
+          scales:{ x:{ stacked:true, beginAtZero:true, ticks:{ precision:0 }, title:{ display:true, text:'Number of responses' } },
+            y:{ stacked:true } } }
+      });
+    });
+  }
+  (function(){
+    const d = document.getElementById('concItemDetails');
+    let built = false;
+    if (d) d.addEventListener('toggle', function(){ if (d.open && !built){ built = true; buildConcItemCharts(); } });
+  })();
+
+  // 8. Tech Expo means
+  new Chart(document.getElementById('chartExpo'), {
+    type:'bar',
+    data:{ labels:['Identify campus partners','Tech Expo networking','Social Hour networking','Sense of AI developments'],
+      datasets:[{ data:[4.04,3.96,3.92,3.87], backgroundColor:BAR, borderRadius:4 }] },
+    options:{ indexAxis:'y', maintainAspectRatio:false, ...noLegend,
+      scales:{ x:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } } } }
+  });
+
+  // Print / Save as PDF: open every dropdown (builds lazy charts), let charts settle, then print
+  function printReport(){
+    document.querySelectorAll('details').forEach(function(d){ d.open = true; });
+    setTimeout(function(){
+      try { Object.values(Chart.instances).forEach(function(c){ c.resize(); }); } catch(e){}
+      setTimeout(function(){ window.print(); }, 250);
+    }, 250);
+  }
+</script>
+</body>
+</html>
