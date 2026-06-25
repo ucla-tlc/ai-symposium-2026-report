@@ -736,13 +736,19 @@ It also would have been interesting to have one or two undergraduate students of
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 <script>
   const BLUE='#2774AE', DARK='#003B5C', GOLD='#FFD100', MUTED='#5a6672';
   const BAR='#003B5C'; // single consistent color for all non-stacked bar charts
   const PALETTE=['#003B5C','#005587','#8BB8E8','#2774AE','#FFB81C','#FFC72C','#577590'];
   Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
   Chart.defaults.color = '#1f2933';
-  const noLegend = { plugins:{ legend:{ display:false } } };
+  // Show data labels on bars; off by default so each chart opts in.
+  if (window.ChartDataLabels) Chart.register(window.ChartDataLabels);
+  Chart.defaults.set('plugins.datalabels', { display:false });
+  const noLegend = { plugins:{ legend:{ display:false }, datalabels:{ display:false } } };
+  // White text on the two dark-blue Likert bands (indices 0–1), dark text on the lighter bands (2–4)
+  const likertTextColor = (ctx)=> (ctx.datasetIndex <= 1 ? '#ffffff' : '#1f2933');
 
   // 2. Faculty mix (doughnut)
   new Chart(document.getElementById('chartFacultyMix'), {
@@ -760,7 +766,9 @@ It also would have been interesting to have one or two undergraduate students of
     data:{ labels:['Overall Experience','Keynote & Panel','Concurrent (avg attended)','Tech Expo / Social Hour'],
       datasets:[{ label:'Mean rating', data:[4.34,4.41,4.18,3.95],
         backgroundColor:BAR, borderRadius:4 }] },
-    options:{ maintainAspectRatio:false, ...noLegend,
+    options:{ maintainAspectRatio:false,
+      plugins:{ legend:{ display:false },
+        datalabels:{ display:true, anchor:'end', align:'top', offset:2, color:'#003B5C', font:{ weight:'700' }, formatter:(v)=>v.toFixed(2) } },
       scales:{ y:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } } } }
   });
 
@@ -769,8 +777,10 @@ It also would have been interesting to have one or two undergraduate students of
     type:'bar',
     data:{ labels:['Relevant to my work','Practical ideas to apply','Format/engagement','New perspectives'],
       datasets:[
-        { label:'Mean (1–5)', data:[4.64,4.28,4.24,4.18], backgroundColor:BAR, borderRadius:4, yAxisID:'y' },
-        { label:'% Agree (4–5)', data:[98,88,78,84], type:'line', borderColor:'#FFB81C', backgroundColor:'#FFB81C', tension:.3, yAxisID:'y1', pointRadius:4 }
+        { label:'Mean (1–5)', data:[4.64,4.28,4.24,4.18], backgroundColor:BAR, borderRadius:4, yAxisID:'y',
+          datalabels:{ display:true, anchor:'end', align:'top', offset:2, color:'#003B5C', font:{weight:'700'}, formatter:(v)=>v.toFixed(2) } },
+        { label:'% Agree (4–5)', data:[98,88,78,84], type:'line', borderColor:'#FFB81C', backgroundColor:'#FFB81C', tension:.3, yAxisID:'y1', pointRadius:4,
+          datalabels:{ display:true, anchor:'end', align:'top', offset:4, color:'#9a6a00', font:{weight:'700'}, formatter:(v)=>v+'%' } }
       ] },
     options:{ maintainAspectRatio:false,
       plugins:{ legend:{ position:'top' } },
@@ -799,7 +809,8 @@ It also would have been interesting to have one or two undergraduate students of
         data:distData.map(r=>r[i]),
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
-        borderWidth:1
+        borderWidth:1,
+        datalabels:{ display:(ctx)=> ctx.dataset.data[ctx.dataIndex] >= 3, color:likertTextColor, font:{size:11,weight:'700'}, formatter:(v)=>v }
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
@@ -843,7 +854,8 @@ It also would have been interesting to have one or two undergraduate students of
         data:expoData.map(r=>r[i]),
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
-        borderWidth:1
+        borderWidth:1,
+        datalabels:{ display:(ctx)=> ctx.dataset.data[ctx.dataIndex] >= 2, color:likertTextColor, font:{size:11,weight:'700'}, formatter:(v)=>v }
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
@@ -871,7 +883,8 @@ It also would have been interesting to have one or two undergraduate students of
         rawCounts:concData.map(r=>r[i]),
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
-        borderWidth:1
+        borderWidth:1,
+        datalabels:{ display:(ctx)=> ctx.dataset.data[ctx.dataIndex] >= 8, color:likertTextColor, font:{size:11,weight:'700'}, formatter:(v)=>Math.round(v)+'%' }
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
@@ -890,7 +903,8 @@ It also would have been interesting to have one or two undergraduate students of
       new Chart(document.getElementById(pair[0]), {
         type:'bar',
         data:{ labels:sessLabels,
-          datasets: LIKERT_LABELS.map((lab,i)=>({ label:lab, data:pair[1].map(r=>r[i]), backgroundColor:LIKERT_COLORS[i], borderColor:'#fff', borderWidth:1 })) },
+          datasets: LIKERT_LABELS.map((lab,i)=>({ label:lab, data:pair[1].map(r=>r[i]), backgroundColor:LIKERT_COLORS[i], borderColor:'#fff', borderWidth:1,
+            datalabels:{ display:(ctx)=> ctx.dataset.data[ctx.dataIndex] >= 2, color:likertTextColor, font:{size:11,weight:'700'}, formatter:(v)=>v } })) },
         options:{ indexAxis:'y', maintainAspectRatio:false,
           plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
             tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x } } },
@@ -910,7 +924,9 @@ It also would have been interesting to have one or two undergraduate students of
     type:'bar',
     data:{ labels:['Identify campus partners','Tech Expo networking','Social Hour networking','Sense of AI developments'],
       datasets:[{ data:[4.04,3.96,3.92,3.87], backgroundColor:BAR, borderRadius:4 }] },
-    options:{ indexAxis:'y', maintainAspectRatio:false, ...noLegend,
+    options:{ indexAxis:'y', maintainAspectRatio:false,
+      plugins:{ legend:{ display:false },
+        datalabels:{ display:true, anchor:'end', align:'right', offset:2, clamp:true, color:'#003B5C', font:{weight:'700'}, formatter:(v)=>v.toFixed(2) } },
       scales:{ x:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } } } }
   });
 
