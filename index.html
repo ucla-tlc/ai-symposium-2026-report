@@ -62,6 +62,43 @@
   .chart-sr-note { font-size: .85rem; color: var(--muted); margin: 0 0 10px; }
   .chart-sr-note .sample-key { font-weight: 700; }
   .chart-sr-note .sample-key .key-red { color: #bc4749; }
+  .likert-color-key {
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .likert-color-key-title {
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--ucla-dark);
+    margin: 0 0 10px;
+  }
+  .likert-color-key-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+    gap: 10px 16px;
+  }
+  .likert-color-key-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .84rem;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .likert-swatch {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,.12);
+    flex-shrink: 0;
+  }
   .pct { font-size: .88rem; font-weight: 600; color: var(--ink); margin-left: 8px; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -398,6 +435,7 @@
     /* expand all dropdowns so their content prints */
     details > summary { color: var(--ucla-dark); }
     details[open] .chart-wrap { height: 280px; }
+    .chart-dialog, .chart-visual-hint { display: none !important; }
   }
   .chart-box {
     border: 1px solid var(--line);
@@ -412,12 +450,145 @@
     color: var(--ucla-dark);
     margin-bottom: 12px;
   }
+  .chart-box .chart-figure + .tablenote {
+    margin-top: 1.75rem;
+  }
+  .chart-visual-hint {
+    font-size: .84rem;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .chart-wrap.chart-clickable { cursor: pointer; }
+  .chart-wrap.chart-clickable:focus { outline: 3px solid #FFB81C; outline-offset: 2px; }
+  .chart-wrap.chart-clickable:focus:not(:focus-visible) { outline: none; }
+  .chart-dialog {
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+    width: auto;
+    max-width: min(1200px, 98vw);
+    height: auto;
+    max-height: 92vh;
+    box-shadow: 0 12px 40px rgba(0,0,0,.2);
+    overflow: visible;
+  }
+  .chart-dialog::backdrop { background: rgba(0, 59, 92, 0.45); }
+  .chart-dialog-inner {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    padding: 20px 24px 24px;
+    box-sizing: border-box;
+  }
+  .chart-dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+  .chart-dialog-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ucla-dark);
+    margin: 0;
+    padding-right: 8px;
+  }
+  .chart-dialog-close {
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--ucla-dark);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .chart-dialog-close:hover { background: var(--bg-soft); }
+  .chart-dialog-body {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .chart-dialog-body .chart-wrap.is-popup {
+    flex: 0 0 auto;
+    cursor: default;
+    margin: 0 auto;
+    position: relative;
+    overflow: visible;
+  }
+  .chart-wrap.is-popup > canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .chart-wrap.is-popup .chart-canvas-holder {
+    display: block;
+    position: relative;
+    width: 100% !important;
+    flex: 0 0 auto;
+  }
+  .chart-wrap.is-popup .chart-canvas-holder canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .chart-wrap.is-popup.div-stack {
+    display: flex;
+    flex-direction: column;
+  }
+  .chart-wrap.is-popup .division-legend-grid {
+    flex: 0 0 auto;
+    font-size: 1.05rem;
+    margin-top: 16px;
+  }
+  .chart-wrap.div-stack {
+    height: auto;
+    min-height: 220px;
+  }
+  .chart-canvas-holder {
+    position: relative;
+    height: 220px;
+  }
+  .division-legend-grid {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 14px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .division-legend-grid li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .division-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    border: 1px solid rgba(0,0,0,.08);
+  }
+  .chart-dialog-body .chart-html-tooltip { font-size: 16px; }
   .chart-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
   }
-  .chart-wrap { position: relative; height: 300px; }
+  .chart-wrap { position: relative; height: 360px; }
   .chart-html-tooltip {
     position: absolute;
     pointer-events: none;
@@ -427,7 +598,7 @@
     border: 1px solid rgba(0, 59, 92, 0.12);
     border-radius: 6px;
     padding: 8px 12px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.35;
     white-space: nowrap;
@@ -438,12 +609,11 @@
   }
   .chart-html-tooltip.is-visible { opacity: 1; }
   .chart-html-tooltip .tip-title { font-weight: 700; margin-bottom: 2px; }
-  .chart-wrap.tall { height: 360px; }
-  .chart-wrap.combo { height: 400px; }
-  .chart-wrap.combo.tall { height: 440px; }
-  .chart-wrap.expo { height: 320px; }
-  .chart-wrap.expo-dist { height: 340px; }
-  .chart-wrap.div-stack { height: 180px; }
+  .chart-wrap.tall { height: 420px; }
+  .chart-wrap.combo { height: 460px; }
+  .chart-wrap.combo.tall { height: 500px; }
+  .chart-wrap.expo { height: 380px; }
+  .chart-wrap.expo-dist { height: 400px; }
   @media (max-width: 680px) {
     .chart-grid { grid-template-columns: 1fr; }
   }
@@ -544,9 +714,19 @@
     <div class="chart-box">
       <figure class="chart-figure" aria-labelledby="chartDivision-title">
       <p class="chart-title" id="chartDivision-title">Primary Division or School — share of respondents (preliminary; n = 49)</p>
-      <p class="chart-sr-note">Decorative chart. 100% stacked bar of the six top-level groups from the table above (sub-rows are in the table only). The three largest groups are highlighted; remaining groups are grey. Hover any segment for count and percent.</p>
+      <p class="chart-sr-note">Decorative chart. 100% stacked bar of the six top-level groups from the table above (sub-rows are in the table only). Colors use the UCLA tertiary palette. Hover any segment for count and percent.</p>
       <div class="chart-visual">
-      <div class="chart-wrap div-stack"><canvas id="chartDivision"></canvas></div>
+      <div class="chart-wrap div-stack">
+        <div class="chart-canvas-holder"><canvas id="chartDivision"></canvas></div>
+        <ul class="division-legend-grid" aria-hidden="true">
+          <li><span class="division-swatch" style="background:#8237FF"></span>L&amp;S (all)</li>
+          <li><span class="division-swatch" style="background:#00FFFF"></span>Engineering</li>
+          <li><span class="division-swatch" style="background:#FF00A5"></span>Professional Health (all)</li>
+          <li><span class="division-swatch" style="background:#00FF87"></span>Other professional schools (all)</li>
+          <li><span class="division-swatch" style="background:#FFFF00"></span>UCLA Extension</li>
+          <li><span class="division-swatch" style="background:#000000"></span>Other (edited)</li>
+        </ul>
+      </div>
       </div>
       <details class="chart-data">
         <summary>View data table (accessible alternative to chart)</summary>
@@ -577,7 +757,19 @@
     <p>A notable share of respondents attended <strong>remotely via Zoom</strong>, as confirmed by the open-ended comments. These attendees were necessarily unable to participate in the in-person Tech Expo and Social Hour; we assume most did not answer the corresponding survey items (see the interpretation note in Section 1).</p>
 
     <h2 id="satisfaction-ratings"><span class="num">4</span>Satisfaction Ratings</h2>
-    <p class="lead">All items use a 5-point agreement scale: 1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree. Full question wording is in <a href="#appendix2">Appendix 2 — Survey Instrument</a>. Every chart in this section has an equivalent data table — expand <strong>View data table</strong> below the chart, or use the rating tables in each subsection.</p>
+    <p class="lead">All items use a 5-point agreement scale: 1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree. Full question wording is in <a href="#appendix2">Appendix 2 — Survey Instrument</a>. <strong>Click any chart</strong> to open a larger view, or use the data table below each chart for exact values.</p>
+
+    <div class="likert-color-key" id="likert-color-key" aria-label="Agreement scale color key for distribution charts">
+      <p class="likert-color-key-title">Agreement scale colors — UCLA tertiary palette (distribution charts)</p>
+      <ul class="likert-color-key-list">
+        <li><span class="likert-swatch" style="background:#FF00A5" aria-hidden="true"></span><span>1 — Strongly Disagree (Magenta)</span></li>
+        <li><span class="likert-swatch" style="background:#8237FF" aria-hidden="true"></span><span>2 — Disagree (Purple)</span></li>
+        <li><span class="likert-swatch" style="background:#00FFFF" aria-hidden="true"></span><span>3 — Neutral (Cyan)</span></li>
+        <li><span class="likert-swatch" style="background:#00FF87" aria-hidden="true"></span><span>4 — Agree (Green)</span></li>
+        <li><span class="likert-swatch" style="background:#FFFF00" aria-hidden="true"></span><span>5 — Strongly Agree (Yellow)</span></li>
+      </ul>
+      <p class="tablenote" style="margin:10px 0 0">Tertiary colors are used in graphics only. RGB values may appear slightly duller in CMYK print.</p>
+    </div>
 
     <div class="chart-box">
       <figure class="chart-figure" aria-labelledby="chartComponents-title">
@@ -631,7 +823,7 @@
     <div class="chart-box">
       <figure class="chart-figure" aria-labelledby="chartOverallDist-title">
       <p class="chart-title" id="chartOverallDist-title">Overall experience — distribution of responses (preliminary; n = 50)</p>
-      <p class="chart-sr-note">Decorative chart. Darkest blue = Strongly Disagree (1); lighter blue = Disagree (2). Zero-count categories do not appear. Every non-zero segment is labeled — match counts to the data table below.</p>
+      <p class="chart-sr-note">Decorative chart. Colors match the tertiary agreement scale key above (1 = Magenta through 5 = Yellow). Small segments omit in-bar labels — hover for count. Larger segments show count and percent; match the data table below.</p>
       <div class="chart-visual">
       <div class="chart-wrap"><canvas id="chartOverallDist"></canvas></div>
       </div>
@@ -760,7 +952,7 @@
     <div class="chart-box">
       <figure class="chart-figure" aria-labelledby="chartExpoDist-title">
       <p class="chart-title" id="chartExpoDist-title">Tech Expo &amp; Social Hour — distribution of responses (preliminary; n ≈ 23–24)</p>
-      <p class="chart-sr-note">Decorative chart. Darkest blue = Strongly Disagree (1); lighter blue = Disagree (2). Zero-count categories do not appear. Every non-zero segment is labeled — match counts to the data table below.</p>
+      <p class="chart-sr-note">Decorative chart. Colors match the tertiary agreement scale key above (1 = Magenta through 5 = Yellow). Small segments omit in-bar labels — hover for count. Larger segments show count and percent; match the data table below.</p>
       <div class="chart-visual">
       <div class="chart-wrap expo-dist"><canvas id="chartExpoDist"></canvas></div>
       </div>
@@ -940,6 +1132,16 @@ It also would have been interesting to have one or two undergraduate students of
   </footer>
 </div>
 
+<dialog id="chartPopupDialog" class="chart-dialog" aria-labelledby="chartPopupDialogTitle">
+  <div class="chart-dialog-inner">
+    <div class="chart-dialog-head">
+      <p class="chart-dialog-title" id="chartPopupDialogTitle">Chart</p>
+      <button type="button" class="chart-dialog-close" id="chartPopupDialogClose" aria-label="Close enlarged chart">Close</button>
+    </div>
+    <div class="chart-dialog-body" id="chartPopupDialogBody"></div>
+  </div>
+</dialog>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script>
@@ -947,7 +1149,42 @@ It also would have been interesting to have one or two undergraduate students of
   const BAR='#003B5C'; // single consistent color for all non-stacked bar charts
   const PALETTE=['#003B5C','#005587','#8BB8E8','#2774AE','#FFB81C','#FFC72C','#577590'];
   Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+  Chart.defaults.font.size = 15;
   Chart.defaults.color = '#1f2933';
+  const POPUP_SCALE = 1.5;
+  const POPUP_DIV_CANVAS_SCALE = 2;
+  const POPUP_FONT_SCALE = 1.5;
+  const CAT_TICK = { maxRotation: 0, minRotation: 0, autoSkip: false, font: { size: 15 } };
+  const LEGEND_BOTTOM = {
+    position: 'bottom',
+    align: 'center',
+    labels: { boxWidth: 14, boxHeight: 14, padding: 18, font: { size: 15, weight: 'normal' } }
+  };
+  const LEGEND_RIGHT = {
+    position: 'right',
+    align: 'center',
+    labels: { boxWidth: 14, boxHeight: 14, padding: 10, font: { size: 14, weight: 'normal' } }
+  };
+  function wrapChartLabel(text, maxChars){
+    maxChars = maxChars || 17;
+    const s = String(text);
+    if (s.length <= maxChars) return s;
+    const words = s.split(/\s+/);
+    const lines = [];
+    let cur = '';
+    words.forEach(function(w){
+      const next = cur ? cur + ' ' + w : w;
+      if (next.length <= maxChars) cur = next;
+      else {
+        if (cur) lines.push(cur);
+        cur = w;
+      }
+    });
+    if (cur) lines.push(cur);
+    if (lines.length <= 3) return lines.join('\n');
+    return lines.slice(0, 2).join('\n') + '\n' + lines.slice(2).join(' ');
+  }
+  function wrapLabels(arr, maxChars){ return arr.map(function(l){ return wrapChartLabel(l, maxChars); }); }
   // Show data labels on bars; off by default so each chart opts in.
   if (window.ChartDataLabels) Chart.register(window.ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', { display:false });
@@ -956,6 +1193,11 @@ It also would have been interesting to have one or two undergraduate students of
   Chart.defaults.animation = chartAnim;
   Chart.defaults.set('plugins.tooltip', { enabled: true, animation: false, external: htmlExternalTooltip });
   Chart.defaults.set('interaction', { mode: 'nearest', intersect: true });
+  function chartLabelFont(chart, weight, basePx){
+    const wrap = chart.canvas.closest('.chart-wrap');
+    const factor = wrap && wrap.classList.contains('is-popup') ? POPUP_FONT_SCALE : 1;
+    return weight + ' ' + Math.max(12, Math.round(basePx * factor)) + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  }
   function getChartTooltipEl(chart){
     const host = chart.canvas.parentNode;
     let el = host.querySelector('.chart-html-tooltip');
@@ -993,47 +1235,97 @@ It also would have been interesting to have one or two undergraduate students of
     return function(c){
       const v = c.parsed.x;
       const total = totals[c.dataIndex];
-      return c.dataset.label + ': ' + v + ' (' + Math.round(v / total * 100) + '%)';
+      const lab = (typeof LIKERT_LABELS !== 'undefined' && LIKERT_LABELS[c.datasetIndex])
+        ? LIKERT_LABELS[c.datasetIndex] : c.dataset.label;
+      return lab + ': ' + v + ' (' + Math.round(v / total * 100) + '%)';
     };
   }
   function facultySliceTextColor(i){
-    const bg = PALETTE[i];
-    return (bg === '#8BB8E8' || bg === '#FFB81C' || bg === '#FFC72C') ? '#1f2933' : '#ffffff';
+    const bg = FACULTY_TERTIARY[i];
+    return tertiaryTextColor(bg);
   }
   const noLegend = { plugins:{ legend:{ display:false }, datalabels:{ display:false } } };
-  const likertTextColor = (ctx)=> (ctx.datasetIndex <= 1 ? '#ffffff' : '#1f2933');
-  function stackedLabel(totals, minPct, fontSize, minCount){
-    const size = fontSize || 10;
+  // UCLA tertiary palette (graphics only)
+  const TERTIARY = ['#FF00A5','#8237FF','#00FFFF','#00FF87','#FFFF00','#000000'];
+  function tertiaryTextColor(hex){
+    return (hex === '#FFFF00' || hex === '#00FFFF' || hex === '#00FF87') ? '#1f2933' : '#ffffff';
+  }
+  // Likert 1→5: UCLA tertiary palette (graphics only — RGB screen values)
+  const LIKERT_COLORS = TERTIARY.slice(0, 5); // Magenta → Yellow
+  const LIKERT_LABEL_COLORS = ['#ffffff','#ffffff','#1f2933','#1f2933','#1f2933'];
+  const likertTextColor = (ctx)=> LIKERT_LABEL_COLORS[ctx.datasetIndex] || '#1f2933';
+  function measureLabelWidth(chart, text, fontWeight, fontSize){
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.font = (fontWeight || '700') + ' ' + fontSize + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    const w = ctx.measureText(String(text)).width;
+    ctx.restore();
+    return w;
+  }
+  function getSegmentSpan(chart, bar){
+    if (!bar) return 0;
+    const horizontal = chart.options.indexAxis === 'y';
+    if (typeof bar.getBounds === 'function'){
+      try {
+        const b = bar.getBounds();
+        const w = Math.abs(b.right - b.left);
+        const h = Math.abs(b.bottom - b.top);
+        return horizontal ? w : h;
+      } catch(e){}
+    }
+    return horizontal ? Math.abs(bar.width || 0) : Math.abs(bar.height || 0);
+  }
+  function barSegmentFitsLabel(ctx, labelText, fontSize, padding, fontWeight){
+    padding = padding || 6;
+    fontWeight = fontWeight || '700';
+    const chart = ctx.chart;
+    const bar = chart.getDatasetMeta(ctx.datasetIndex).data[ctx.dataIndex];
+    const span = getSegmentSpan(chart, bar);
+    if (span > 0 && span < 14) return false;
+    if (span <= 0) return true;
+    const textW = measureLabelWidth(chart, labelText, fontWeight, fontSize);
+    return span >= textW + padding;
+  }
+  function stackedLabel(totals, minPct, fontSize, minCount, options){
+    const size = fontSize || 14;
     const minN = minCount != null ? minCount : 3;
+    const opts = options || {};
     return {
       display:(ctx)=>{
         const n = ctx.dataset.data[ctx.dataIndex];
         if (!n) return false;
         const total = totals[ctx.dataIndex];
-        if (minN <= 1) return true;
-        return (n / total * 100) >= minPct || n >= minN;
+        if (n < minN) return false;
+        if (minPct != null && (n / total * 100) < minPct) return false;
+        const shortBelow = opts.shortBelow;
+        const label = (shortBelow && n < shortBelow)
+          ? String(n)
+          : n + ' (' + Math.round(n / total * 100) + '%)';
+        return barSegmentFitsLabel(ctx, label, size, 6);
       },
-      anchor:'center', align:'center', clip:false,
+      anchor:'center', align:'center', clip:true,
       color:likertTextColor, font:{ size:size, weight:'700' },
       formatter:(v, ctx)=>{
         const total = totals[ctx.dataIndex];
+        if (opts.shortBelow && v < opts.shortBelow) return String(v);
         return v + ' (' + Math.round(v / total * 100) + '%)';
       }
     };
   }
 
-  // 2. Faculty mix (doughnut) — on-slice labels when n >= 3; smaller groups in note below chart
+  // 2. Faculty mix (doughnut) — tertiary palette; on-slice labels when n >= 3
+  const FACULTY_TERTIARY = ['#8237FF','#00FFFF','#00FF87','#FFFF00','#FF00A5','#000000','#6B7280'];
   const facultyMixLabels = ['Faculty', 'Staff', 'Students', 'Extension Instr.', 'Admin', 'Other', 'Postdoc'];
   const facultyMixData = [32, 7, 3, 3, 2, 2, 1];
   const facultyMixTotal = 50;
   new Chart(document.getElementById('chartFacultyMix'), {
     type:'doughnut',
     data:{ labels:facultyMixLabels,
-      datasets:[{ data:facultyMixData, backgroundColor:PALETTE, borderColor:'#fff', borderWidth:2,
+      datasets:[{ data:facultyMixData, backgroundColor:FACULTY_TERTIARY, borderColor:'#fff', borderWidth:2,
         datalabels:{
           display:(ctx)=> facultyMixData[ctx.dataIndex] >= 3,
           color:(ctx)=> facultySliceTextColor(ctx.dataIndex),
-          font:(ctx)=>({ weight:'700', size: facultyMixData[ctx.dataIndex] >= 7 ? 12 : 10 }),
+          font:(ctx)=>({ weight:'700', size: facultyMixData[ctx.dataIndex] >= 7 ? 13 : 12 }),
           textAlign:'center',
           formatter:(value)=> value + ' (' + Math.round(value / facultyMixTotal * 100) + '%)'
         } }] },
@@ -1041,7 +1333,7 @@ It also would have been interesting to have one or two undergraduate students of
       interaction:{ mode:'point', intersect:true },
       elements:{ arc:{ hoverOffset:6 } },
       plugins:{
-        legend:{ position:'right', labels:{ boxWidth:14, font:{ size:14.5 } } },
+        legend: Object.assign({}, LEGEND_RIGHT),
         datalabels:{ display:true, listeners:false },
         tooltip:{
           enabled:true,
@@ -1056,20 +1348,18 @@ It also would have been interesting to have one or two undergraduate students of
       } }
   });
 
-  // 3. Division / School — 100% stacked bar; top 3 groups highlighted, rest grey (n = 49)
+  // 3. Division / School — 100% stacked bar; UCLA tertiary palette (n = 49)
   const divTotal = 49;
-  const DIV_MUTED = '#bcc4cc';
   const divGroups = [
-    { label: 'L&S (all)', n: 16, highlight: true, color: '#2774AE' },
-    { label: 'Engineering', n: 6, highlight: true, color: '#005587' },
-    { label: 'Professional Health (all)', n: 17, highlight: true, color: '#003B5C' },
-    { label: 'Other professional schools (all)', n: 3, highlight: false },
-    { label: 'UCLA Extension', n: 2, highlight: false },
-    { label: 'Other (edited)', n: 5, highlight: false }
+    { label: 'L&S (all)', n: 16, color: '#8237FF' },
+    { label: 'Engineering', n: 6, color: '#00FFFF' },
+    { label: 'Professional Health (all)', n: 17, color: '#FF00A5' },
+    { label: 'Other professional schools (all)', n: 3, color: '#00FF87' },
+    { label: 'UCLA Extension', n: 2, color: '#FFFF00' },
+    { label: 'Other (edited)', n: 5, color: '#000000' }
   ];
   function divPctLabelColor(g){
-    if (!g.highlight) return '#4a5568';
-    return '#ffffff';
+    return tertiaryTextColor(g.color);
   }
   new Chart(document.getElementById('chartDivision'), {
     type:'bar',
@@ -1080,13 +1370,17 @@ It also would have been interesting to have one or two undergraduate students of
         return {
           label: g.label,
           data: [pct],
-          backgroundColor: g.highlight ? g.color : DIV_MUTED,
+          backgroundColor: g.color,
           borderColor:'#fff',
           borderWidth:2,
           datalabels:{
-            display: g.highlight && pct >= 8,
+            display: function(ctx){
+              if (pct < 8) return false;
+              return barSegmentFitsLabel(ctx, Math.round(pct) + '%', 14, 4, 'normal');
+            },
             color: divPctLabelColor(g),
-            font:{ weight:'700', size:11 },
+            font:{ weight:'normal', size:14 },
+            clip:true,
             formatter:()=> Math.round(pct) + '%'
           }
         };
@@ -1094,7 +1388,7 @@ It also would have been interesting to have one or two undergraduate students of
     },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{
-        legend:{ position:'bottom', labels:{ boxWidth:14, font:{ size:12 }, padding:14 } },
+        legend:{ display:false },
         datalabels:{ display:true },
         tooltip:{ callbacks:{
           label:(c)=>{
@@ -1113,7 +1407,7 @@ It also would have been interesting to have one or two undergraduate students of
   });
 
   // 5. Component comparison (mean)
-  const compLabels = ['Overall Experience', 'Keynote & Panel', 'Concurrent (avg attended)', 'Tech Expo / Social Hour'];
+  const compLabels = wrapLabels(['Overall Experience', 'Keynote & Panel', 'Concurrent (avg attended)', 'Tech Expo / Social Hour'], 16);
   const compN = [50, 47, 32, 24];
   new Chart(document.getElementById('chartComponents'), {
     type:'bar',
@@ -1126,32 +1420,33 @@ It also would have been interesting to have one or two undergraduate students of
         const ctx = chart.ctx;
         const meta = chart.getDatasetMeta(0);
         meta.data.forEach((bar, i)=>{
-          if (!bar || bar.height < 24) return;
+          if (!bar || bar.height < 22) return;
           const x = bar.x;
           const y = bar.y + bar.height * 0.42;
           ctx.save();
           ctx.fillStyle = '#ffffff';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.font = '700 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.font = chartLabelFont(chart, '700', 15);
           ctx.fillText(chart.data.datasets[0].data[i].toFixed(2), x, y - 6);
-          ctx.font = '600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.font = chartLabelFont(chart, '600', 13);
           ctx.fillText('n=' + compN[i], x, y + 8);
           ctx.restore();
         });
       }
     }],
-    options:{ maintainAspectRatio:false, layout:{ padding:{ top:6 } },
+    options:{ maintainAspectRatio:false,
+      layout:{ padding:{ top:6, bottom:10 } },
       plugins:{ legend:{ display:false },
         tooltip:{ callbacks:{
           label:(ctx)=> 'Mean: ' + ctx.parsed.y.toFixed(2) + ' (n=' + compN[ctx.dataIndex] + ')'
         }} },
       scales:{ y:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } },
-        x:{ ticks:{ font:{ size:11 } } } } }
+        x:{ ticks: Object.assign({}, CAT_TICK), grid:{ display:false } } } }
   });
 
   // 6. Overall experience — mean bars
-  const overallLabels = ['Relevant to my work', 'Practical ideas to apply', 'Format/engagement', 'New perspectives'];
+  const overallLabels = wrapLabels(['Relevant to my work', 'Practical ideas to apply', 'Format/engagement', 'New perspectives'], 18);
   new Chart(document.getElementById('chartOverall'), {
     type:'bar',
     data:{ labels:overallLabels,
@@ -1171,7 +1466,7 @@ It also would have been interesting to have one or two undergraduate students of
           const mean = chart.data.datasets[0].data[i].toFixed(2);
           ctx.save();
           ctx.textAlign = 'center';
-          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.font = chartLabelFont(chart, '700', 15);
           ctx.fillStyle = '#ffffff';
           ctx.textBaseline = 'middle';
           ctx.fillText(mean, x, bar.y + bar.height * 0.45);
@@ -1189,15 +1484,16 @@ It also would have been interesting to have one or two undergraduate students of
       },
       scales:{
         y:{ min:1, max:5, title:{ display:true, text:'Mean' } },
-        x:{ ticks:{ font:{ size:11 }, maxRotation:0, autoSkip:false } }
-      } }
+        x:{ ticks: Object.assign({}, CAT_TICK), grid:{ display:false } }
+      },
+      layout:{ padding:{ top:8, bottom:12, left:4, right:12 } } }
   });
 
   // 6b. Overall experience — distribution stacked bar (counts of 1–5)
-  const LIKERT_COLORS = ['#003B5C','#005587','#8BB8E8','#FFB81C','#FFC72C']; // 1→5: darkest blue … darker gold
   const LIKERT_LABELS = ['1 Strongly Disagree','2 Disagree','3 Neutral','4 Agree','5 Strongly Agree'];
+  const LIKERT_LEGEND = ['1 · Strongly disagree','2 · Disagree','3 · Neutral','4 · Agree','5 · Strongly agree'];
   // rows ordered to match the report table (top = highest mean)
-  const distItems = ['Relevant to my work', 'Practical ideas to apply', 'Format/engagement', 'New perspectives'];
+  const distItems = wrapLabels(['Relevant to my work', 'Practical ideas to apply', 'Format/engagement', 'New perspectives'], 20);
   const distData = [
     [0,0,1,16,33],  // Q21_2 relevant
     [0,0,6,24,20],  // Q21_3 practical
@@ -1208,31 +1504,31 @@ It also would have been interesting to have one or two undergraduate students of
   new Chart(document.getElementById('chartOverallDist'), {
     type:'bar',
     data:{ labels:distItems,
-      datasets: LIKERT_LABELS.map((lab,i)=>({
+      datasets: LIKERT_LEGEND.map((lab,i)=>({
         label:lab,
         data:distData.map(r=>r[i]),
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
-        borderWidth:1,
-        datalabels: stackedLabel(distTotals, 10, 10, 1)
+        borderWidth:2,
+        datalabels: stackedLabel(distTotals, 10, 10, 6, { shortBelow: 16 })
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
-      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+      plugins:{ legend: Object.assign({}, LEGEND_BOTTOM),
         tooltip:{ callbacks:{ label: stackedPctTooltip(distTotals) } } },
       scales:{ x:{ stacked:true, beginAtZero:true, max:50, title:{ display:true, text:'Number of respondents' } },
-        y:{ stacked:true } } }
+        y:{ stacked:true, ticks: Object.assign({}, CAT_TICK) } } }
   });
 
   // 7. Concurrent sessions — mean (horizontal bars)
   const SMALL='#bc4749';
   const concMeans = [4.56, 4.31, 3.85, 3.61, 3.50];
-  const concLabels = [
+  const concLabels = wrapLabels([
     'Using AI Tools',
     'Evaluating & Applying',
     'Ethics, Integrity & Equity',
     'AI Ethics Writing',
     'Choose Your Own A(I)dventure'
-  ];
+  ], 18);
   const concN = [16, 14, 13, 6, 2];
   const concBarBorders = [null, null, null, SMALL, SMALL];
   new Chart(document.getElementById('chartConcurrent'), {
@@ -1250,10 +1546,10 @@ It also would have been interesting to have one or two undergraduate students of
         if (args.index !== 0) return;
         const ctx = chart.ctx;
         chart.getDatasetMeta(0).data.forEach((bar, i)=>{
-          if (!bar || bar.width < 24) return;
+          if (!bar || bar.width < 26) return;
           const inset = Math.min(14, Math.max(8, bar.width * 0.08));
           ctx.save();
-          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.font = chartLabelFont(chart, '700', 15);
           ctx.fillStyle = '#ffffff';
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
@@ -1272,12 +1568,12 @@ It also would have been interesting to have one or two undergraduate students of
       },
       scales:{
         x:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } },
-        y:{ ticks:{ font:{ size:11 }, autoSkip:false } }
+        y:{ ticks: Object.assign({}, CAT_TICK) }
       } }
   });
 
-  // 7b. Tech Expo — distribution stacked bar (counts of 1–5), ordered by mean
-  const expoItems = ['Identify campus partners', 'Tech Expo networking', 'Social Hour networking', 'Sense of AI developments'];
+  // 7b. Tech Expo — distribution stacked bar
+  const expoItems = wrapLabels(['Identify campus partners', 'Tech Expo networking', 'Social Hour networking', 'Sense of AI developments'], 20);
   const expoData = [
     [0,1,7,5,10],  // Q29_3 identify partners (n=23)
     [0,0,8,8,7],   // Q29_2 expo networking (n=23)
@@ -1288,23 +1584,23 @@ It also would have been interesting to have one or two undergraduate students of
   new Chart(document.getElementById('chartExpoDist'), {
     type:'bar',
     data:{ labels:expoItems,
-      datasets: LIKERT_LABELS.map((lab,i)=>({
+      datasets: LIKERT_LEGEND.map((lab,i)=>({
         label:lab,
         data:expoData.map(r=>r[i]),
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
-        borderWidth:1,
-        datalabels: stackedLabel(expoTotals, 10, 11.5, 1)
+        borderWidth:2,
+        datalabels: stackedLabel(expoTotals, 10, 12, 6)
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
-      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+      plugins:{ legend: Object.assign({}, LEGEND_BOTTOM),
         tooltip:{ callbacks:{ label: stackedPctTooltip(expoTotals) } } },
       scales:{ x:{ stacked:true, beginAtZero:true, title:{ display:true, text:'Number of respondents' } },
-        y:{ stacked:true } } }
+        y:{ stacked:true, ticks: Object.assign({}, CAT_TICK) } } }
   });
 
   // 7c. Concurrent sessions — response distribution (pooled 3 items), count-stacked
-  const concItems = ['Using AI Tools', 'Evaluating & Applying', 'Ethics, Integrity & Equity', 'Building AI Ethics Writing', 'Choose Your Own A(I)dventure'];
+  const concItems = wrapLabels(['Using AI Tools', 'Evaluating & Applying', 'Ethics, Integrity & Equity', 'Building AI Ethics Writing', 'Choose Your Own A(I)dventure'], 20);
   const concData = [
     [0,0,2,17,29], // Using AI Tools (total 48)
     [0,3,2,16,21], // Evaluating & Applying (total 42)
@@ -1316,24 +1612,24 @@ It also would have been interesting to have one or two undergraduate students of
   new Chart(document.getElementById('chartConcurrentDist'), {
     type:'bar',
     data:{ labels:concItems,
-      datasets: LIKERT_LABELS.map((lab,i)=>({
+      datasets: LIKERT_LEGEND.map((lab,i)=>({
         label:lab,
         data:concData.map(r=>r[i]),
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
-        borderWidth:1,
-        datalabels: stackedLabel(concTotals, 10, 10, 1)
+        borderWidth:2,
+        datalabels: stackedLabel(concTotals, 10, 12, 6)
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
-      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+      plugins:{ legend: Object.assign({}, LEGEND_BOTTOM),
         tooltip:{ callbacks:{ label: stackedPctTooltip(concTotals) } } },
       scales:{ x:{ stacked:true, beginAtZero:true, title:{ display:true, text:'Number of responses (3 items pooled)' } },
-        y:{ stacked:true } } }
+        y:{ stacked:true, ticks: Object.assign({}, CAT_TICK) } } }
   });
 
   // 7d. Concurrent sessions — per-item distribution (rendered lazily when dropdown opens)
   function buildConcItemCharts(){
-    const sessLabels = ['Using AI Tools', 'Evaluating & Applying', 'Ethics, Integrity & Equity', 'Building AI Ethics Writing', 'Choose Your Own A(I)dventure'];
+    const sessLabels = wrapLabels(['Using AI Tools', 'Evaluating & Applying', 'Ethics, Integrity & Equity', 'Building AI Ethics Writing', 'Choose Your Own A(I)dventure'], 20);
     const item1 = [[0,0,1,7,8],[0,1,1,5,7],[0,1,2,8,2],[0,1,2,2,1],[0,0,1,1,0]]; // content relevant
     const item2 = [[0,0,1,5,10],[0,1,0,6,7],[0,2,1,7,3],[0,1,1,3,1],[0,0,1,1,0]]; // new knowledge
     const item3 = [[0,0,0,5,11],[0,1,1,5,7],[0,1,3,6,3],[0,1,2,1,2],[0,0,1,1,0]]; // applicable
@@ -1342,15 +1638,16 @@ It also would have been interesting to have one or two undergraduate students of
       new Chart(document.getElementById(pair[0]), {
         type:'bar',
         data:{ labels:sessLabels,
-          datasets: LIKERT_LABELS.map((lab,i)=>({ label:lab, data:pair[1].map(r=>r[i]), backgroundColor:LIKERT_COLORS[i], borderColor:'#fff', borderWidth:1,
-            datalabels: stackedLabel(rowTotals, 10, 10, 1) })) },
+          datasets: LIKERT_LEGEND.map((lab,i)=>({ label:lab, data:pair[1].map(r=>r[i]), backgroundColor:LIKERT_COLORS[i], borderColor:'#fff', borderWidth:2,
+            datalabels: stackedLabel(rowTotals, 10, 12, 6) })) },
         options:{ indexAxis:'y', maintainAspectRatio:false,
-          plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+          plugins:{ legend: Object.assign({}, LEGEND_BOTTOM),
             tooltip:{ callbacks:{ label: stackedPctTooltip(rowTotals) } } },
           scales:{ x:{ stacked:true, beginAtZero:true, ticks:{ precision:0 }, title:{ display:true, text:'Number of responses' } },
-            y:{ stacked:true } } }
+            y:{ stacked:true, ticks: Object.assign({}, CAT_TICK) } } }
       });
     });
+    initChartClickExpand();
   }
   (function(){
     const d = document.getElementById('concItemDetails');
@@ -1370,7 +1667,7 @@ It also would have been interesting to have one or two undergraduate students of
         const ctx = chart.ctx;
         const meta = chart.getDatasetMeta(0);
         meta.data.forEach((bar, i)=>{
-          if (!bar || bar.width < 44) return;
+          if (!bar || bar.width < 36) return;
           const inset = Math.min(14, Math.max(8, bar.width * 0.08));
           const x = bar.x - inset;
           const y = bar.y;
@@ -1378,7 +1675,7 @@ It also would have been interesting to have one or two undergraduate students of
           ctx.fillStyle = '#ffffff';
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
-          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.font = chartLabelFont(chart, '700', 15);
           ctx.fillText(chart.data.datasets[0].data[i].toFixed(2), x, y);
           ctx.restore();
         });
@@ -1389,18 +1686,378 @@ It also would have been interesting to have one or two undergraduate students of
       plugins:{ legend:{ display:false } },
       scales:{
         x:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } },
-        y:{ ticks:{ font:{ size:11 }, autoSkip:false } }
+        y:{ ticks: Object.assign({}, CAT_TICK) }
       } }
   });
 
-  // Print / Save as PDF: open every dropdown (builds lazy charts), let charts settle, then print
+  // Chart popup — click any chart to enlarge with bigger labels
+  function getChartFromCanvas(canvas){
+    if (!canvas) return null;
+    try { return Chart.getChart(canvas) || Chart.getChart(canvas.id); } catch(e){ return null; }
+  }
+  function setFontSize(parent, size){
+    if (!parent) return;
+    if (parent.font && typeof parent.font === 'object' && typeof parent.font !== 'function'){
+      parent.font.size = size;
+    } else if (!parent.font) {
+      parent.font = { size: size };
+    }
+  }
+  function capturePopupBase(chart, canvas){
+    if (chart._popupBase) return chart._popupBase;
+    const o = chart.options;
+    const def = Chart.defaults.font.size || 15;
+    let datalabelSize = def;
+    chart.data.datasets.forEach(function(ds){
+      if (ds.datalabels && ds.datalabels.font && typeof ds.datalabels.font.size === 'number'){
+        datalabelSize = ds.datalabels.font.size;
+      }
+    });
+    chart._popupBase = {
+      tick: (o.scales && o.scales.y && o.scales.y.ticks && o.scales.y.ticks.font && o.scales.y.ticks.font.size) ||
+            (o.scales && o.scales.x && o.scales.x.ticks && o.scales.x.ticks.font && o.scales.x.ticks.font.size) || def,
+      legend: (o.plugins && o.plugins.legend && o.plugins.legend.labels && o.plugins.legend.labels.font && o.plugins.legend.labels.font.size) || def,
+      datalabel: datalabelSize
+    };
+    return chart._popupBase;
+  }
+  function setScaleFont(scale, size){
+    if (!scale || scale.type === 'radialLinear') return;
+    if (!scale.ticks) scale.ticks = {};
+    setFontSize(scale.ticks, size);
+  }
+  function applyPopupFonts(chart, multiplier){
+    if (!chart) return;
+    const base = capturePopupBase(chart, chart.canvas);
+    const fs = function(n){ return Math.max(12, Math.round(n * multiplier)); };
+    const o = chart.options;
+    if (o.scales){
+      Object.keys(o.scales).forEach(function(key){
+        if (key === 'r') return;
+        setScaleFont(o.scales[key], fs(base.tick));
+      });
+    }
+    if (o.plugins && o.plugins.legend && o.plugins.legend.labels){
+      setFontSize(o.plugins.legend.labels, fs(base.legend));
+      if (o.plugins.legend.labels.font) o.plugins.legend.labels.font.weight = 'normal';
+    }
+    chart.data.datasets.forEach(function(ds){
+      if (!ds.datalabels) return;
+      if (typeof ds.datalabels.font === 'function'){
+        if (!ds._datalabelFontFnOrig) ds._datalabelFontFnOrig = ds.datalabels.font;
+        if (multiplier === 1){
+          ds.datalabels.font = ds._datalabelFontFnOrig;
+        } else {
+          const orig = ds._datalabelFontFnOrig;
+          ds.datalabels.font = function(ctx){
+            const r = orig(ctx) || {};
+            const sz = r.size || base.datalabel;
+            return Object.assign({}, r, { size: fs(sz) });
+          };
+        }
+      } else if (ds.datalabels.font && typeof ds.datalabels.font === 'object'){
+        if (!ds._datalabelFontOrig) ds._datalabelFontOrig = Object.assign({}, ds.datalabels.font);
+        if (multiplier === 1){
+          Object.assign(ds.datalabels.font, ds._datalabelFontOrig);
+        } else {
+          ds.datalabels.font.size = fs(base.datalabel);
+        }
+      }
+    });
+  }
+  function applyPopupMode(chart, isPopup){
+    if (!chart) return;
+    if (!chart._popupOrig) chart._popupOrig = {};
+    const o = chart.options;
+    const pl = o.plugins && o.plugins.legend;
+    if (isPopup){
+      if (chart._popupOrig.maintainAspectRatio === undefined){
+        chart._popupOrig.maintainAspectRatio = o.maintainAspectRatio;
+      }
+      if (pl && pl.display !== false && chart._popupOrig.legendPosition === undefined){
+        chart._popupOrig.legendPosition = pl.position;
+        chart._popupOrig.legendAlign = pl.align;
+      }
+      // Keep the same fill behaviour as inline — the 1.5× enlargement comes from the container.
+      o.maintainAspectRatio = chart._popupOrig.maintainAspectRatio;
+      if (pl && pl.display !== false){
+        pl.align = 'center';
+        if (chart.config.type === 'doughnut' || chart.config.type === 'pie'){
+          pl.position = 'bottom';
+        }
+      }
+    } else {
+      if (chart._popupOrig.maintainAspectRatio !== undefined){
+        o.maintainAspectRatio = chart._popupOrig.maintainAspectRatio;
+      }
+      if (pl && chart._popupOrig.legendPosition !== undefined){
+        pl.position = chart._popupOrig.legendPosition;
+        pl.align = chart._popupOrig.legendAlign || 'center';
+      }
+    }
+  }
+  function captureInlineWrapSize(wrap){
+    const holder = wrap.querySelector('.chart-canvas-holder');
+    const legend = wrap.querySelector('.division-legend-grid');
+    wrap.dataset.inlineW = String(Math.max(1, wrap.offsetWidth));
+    wrap.dataset.inlineH = String(Math.max(1, wrap.offsetHeight));
+    wrap.dataset.inlineCanvasH = String(holder ? Math.max(1, holder.offsetHeight) : wrap.dataset.inlineH);
+    wrap.dataset.inlineLegendH = String(legend ? Math.max(0, legend.offsetHeight) : 0);
+  }
+  function popupCanvasHeight(wrap){
+    const baseCanvasH = parseFloat(wrap.dataset.inlineCanvasH || wrap.dataset.inlineH || '360');
+    if (wrap.classList.contains('div-stack')){
+      return Math.round(baseCanvasH * POPUP_DIV_CANVAS_SCALE);
+    }
+    return Math.round(baseCanvasH * POPUP_SCALE);
+  }
+  function setPopupWrapSize(wrap){
+    if (!wrap) return;
+    const baseW = parseFloat(wrap.dataset.inlineW || '360');
+    const baseH = parseFloat(wrap.dataset.inlineH || '360');
+    const legendH = parseFloat(wrap.dataset.inlineLegendH || '0');
+    const canvasH = popupCanvasHeight(wrap);
+    let w = Math.round(baseW * POPUP_SCALE);
+    let h = wrap.classList.contains('div-stack')
+      ? canvasH + legendH + 16
+      : Math.round(baseH * POPUP_SCALE);
+    const ratio = baseW / baseH;
+    const maxW = Math.round(window.innerWidth * 0.92);
+    const maxH = Math.round(window.innerHeight * 0.82);
+    if (w > maxW){ w = maxW; }
+    if (h > maxH){
+      h = maxH;
+      if (!wrap.classList.contains('div-stack')){
+        w = Math.round(h * ratio);
+      }
+    }
+    wrap.style.setProperty('height', h + 'px', 'important');
+    wrap.style.setProperty('width', w + 'px', 'important');
+    wrap.style.setProperty('max-width', maxW + 'px', 'important');
+    wrap.style.setProperty('flex', '0 0 auto', 'important');
+    const holder = wrap.querySelector('.chart-canvas-holder');
+    if (holder){
+      holder.style.setProperty('height', canvasH + 'px', 'important');
+      holder.style.setProperty('width', '100%', 'important');
+      holder.style.setProperty('flex', '0 0 auto', 'important');
+    }
+    return { w: w, h: h, canvasH: canvasH };
+  }
+  function getPopupChartBox(wrap){
+    return wrap.querySelector('.chart-canvas-holder') || wrap;
+  }
+  function syncPopupChartSize(){
+    const wrap = chartPopupState.wrap;
+    if (!wrap) return;
+    const dims = setPopupWrapSize(wrap);
+    const canvas = wrap.querySelector('canvas');
+    const chart = canvas ? getChartFromCanvas(canvas) : null;
+    if (!chart) return;
+    const box = getPopupChartBox(wrap);
+    const bw = box.clientWidth || dims.w;
+    const bh = box.clientHeight || (dims.canvasH || dims.h);
+    chart.options.maintainAspectRatio = false;
+    if (bw > 0 && bh > 0) chart.resize(bw, bh);
+    chart.update('none');
+    resizeChartSoon(chart);
+  }
+  function clearPopupWrapSize(wrap){
+    if (!wrap) return;
+    ['height','width','min-height','max-height','flex','max-width'].forEach(function(prop){
+      wrap.style.removeProperty(prop);
+    });
+    const holder = wrap.querySelector('.chart-canvas-holder');
+    if (holder){
+      ['height','width','flex'].forEach(function(prop){
+        holder.style.removeProperty(prop);
+      });
+    }
+  }
+  function resizeChartSoon(chart){
+    if (!chart) return;
+    chart.resize();
+    requestAnimationFrame(function(){
+      chart.resize();
+      setTimeout(function(){ chart.resize(); }, 80);
+    });
+  }
+  const chartPopupState = { wrap: null, placeholder: null, parent: null, next: null, chartId: null, restoring: false };
+  let chartPopupDialogBound = false;
+  let chartPopupClickBound = false;
+  function restoreChartFromPopup(){
+    if (chartPopupState.restoring) return;
+    const dlgBody = document.getElementById('chartPopupDialogBody');
+    let wrap = chartPopupState.wrap || (dlgBody && dlgBody.querySelector('.chart-wrap'));
+    if (!wrap) return;
+
+    const inDialog = dlgBody && dlgBody.contains(wrap);
+    if (!inDialog && !wrap.classList.contains('is-popup')) return;
+
+    chartPopupState.restoring = true;
+    try {
+      const canvas = wrap.querySelector('canvas');
+      const chart = canvas ? getChartFromCanvas(canvas) : null;
+      if (chart){
+        applyPopupMode(chart, false);
+        applyPopupFonts(chart, 1);
+      }
+
+      wrap.classList.remove('is-popup');
+      clearPopupWrapSize(wrap);
+
+      const parent = chartPopupState.parent;
+      const placeholder = chartPopupState.placeholder;
+      if (placeholder && placeholder.parentNode){
+        placeholder.parentNode.insertBefore(wrap, placeholder);
+        placeholder.remove();
+      } else if (parent){
+        if (chartPopupState.next && chartPopupState.next.parentNode === parent){
+          parent.insertBefore(wrap, chartPopupState.next);
+        } else {
+          parent.appendChild(wrap);
+        }
+      }
+
+      const visual = parent || (wrap.closest && wrap.closest('.chart-visual'));
+      if (visual){
+        wrap.classList.add('chart-clickable');
+        wrap.setAttribute('role', 'button');
+        wrap.setAttribute('tabindex', '0');
+        const figure = visual.closest('.chart-figure');
+        const titleEl = figure && figure.querySelector('.chart-title');
+        if (titleEl) wrap.setAttribute('aria-label', 'Enlarge chart: ' + titleEl.textContent);
+      }
+
+      if (chart){ chart.update('none'); resizeChartSoon(chart); }
+    } finally {
+      document.removeEventListener('keydown', onPopupEscapeKey);
+      chartPopupState.wrap = null;
+      chartPopupState.placeholder = null;
+      chartPopupState.parent = null;
+      chartPopupState.next = null;
+      chartPopupState.chartId = null;
+      chartPopupState.restoring = false;
+    }
+  }
+  function closeChartPopup(){
+    restoreChartFromPopup();
+    const dlg = document.getElementById('chartPopupDialog');
+    if (dlg && dlg.open) dlg.close();
+  }
+  function onPopupEscapeKey(e){
+    if (e.key !== 'Escape') return;
+    const dlg = document.getElementById('chartPopupDialog');
+    if (!dlg || !dlg.open) return;
+    e.preventDefault();
+    closeChartPopup();
+  }
+  function openChartPopup(canvas){
+    const chart = getChartFromCanvas(canvas);
+    if (!chart) return;
+    const wrap = canvas.closest('.chart-wrap');
+    const figure = canvas.closest('.chart-figure');
+    if (!wrap || !figure) return;
+
+    restoreChartFromPopup();
+    const dlg = document.getElementById('chartPopupDialog');
+    if (dlg && dlg.open) dlg.close();
+
+    captureInlineWrapSize(wrap);
+    const placeholder = document.createComment('chart-popup-anchor');
+    wrap.parentNode.insertBefore(placeholder, wrap);
+    chartPopupState.wrap = wrap;
+    chartPopupState.placeholder = placeholder;
+    chartPopupState.parent = placeholder.parentNode;
+    chartPopupState.next = wrap.nextSibling;
+    chartPopupState.chartId = canvas.id;
+
+    applyPopupMode(chart, true);
+    applyPopupFonts(chart, POPUP_FONT_SCALE);
+
+    document.getElementById('chartPopupDialogTitle').textContent =
+      (figure.querySelector('.chart-title') || {}).textContent || 'Chart';
+    document.getElementById('chartPopupDialogBody').appendChild(wrap);
+    wrap.classList.add('is-popup');
+    wrap.classList.remove('chart-clickable');
+    wrap.removeAttribute('tabindex');
+    wrap.removeAttribute('role');
+    wrap.removeAttribute('aria-label');
+
+    dlg.showModal();
+    document.addEventListener('keydown', onPopupEscapeKey);
+    setPopupWrapSize(wrap);
+    syncPopupChartSize();
+    requestAnimationFrame(function(){
+      syncPopupChartSize();
+      setTimeout(syncPopupChartSize, 100);
+      setTimeout(syncPopupChartSize, 250);
+    });
+  }
   function printReport(){
+    closeChartPopup();
     document.querySelectorAll('details').forEach(function(d){ d.open = true; });
     setTimeout(function(){
       try { Object.values(Chart.instances).forEach(function(c){ c.resize(); }); } catch(e){}
       setTimeout(function(){ window.print(); }, 250);
     }, 250);
   }
+  function initChartClickExpand(){
+    document.querySelectorAll('.chart-figure .chart-visual').forEach(function(visual){
+      if (visual.dataset.popupInit) return;
+      visual.dataset.popupInit = '1';
+      const wrap = visual.querySelector('.chart-wrap');
+      const canvas = visual.querySelector('canvas');
+      if (!wrap || !canvas || !canvas.id) return;
+      const figure = visual.closest('.chart-figure');
+      const titleEl = figure && figure.querySelector('.chart-title');
+      const chartName = titleEl ? titleEl.textContent : 'Chart';
+      if (!visual.querySelector('.chart-visual-hint')){
+        const hint = document.createElement('p');
+        hint.className = 'chart-visual-hint';
+        hint.textContent = 'Click chart to enlarge';
+        visual.insertBefore(hint, wrap);
+      }
+      wrap.classList.add('chart-clickable');
+      wrap.setAttribute('role', 'button');
+      wrap.setAttribute('tabindex', '0');
+      wrap.setAttribute('aria-label', 'Enlarge chart: ' + chartName);
+    });
+    if (!chartPopupClickBound){
+      chartPopupClickBound = true;
+      document.addEventListener('click', function(e){
+        const wrap = e.target.closest('.chart-visual .chart-wrap.chart-clickable');
+        if (!wrap || wrap.closest('#chartPopupDialog')) return;
+        const canvas = wrap.querySelector('canvas');
+        if (canvas) openChartPopup(canvas);
+      });
+      document.addEventListener('keydown', function(e){
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const wrap = e.target.closest('.chart-visual .chart-wrap.chart-clickable');
+        if (!wrap || wrap.closest('#chartPopupDialog')) return;
+        e.preventDefault();
+        const canvas = wrap.querySelector('canvas');
+        if (canvas) openChartPopup(canvas);
+      });
+    }
+    if (!chartPopupDialogBound){
+      chartPopupDialogBound = true;
+      const dlg = document.getElementById('chartPopupDialog');
+      const closeBtn = document.getElementById('chartPopupDialogClose');
+      if (closeBtn) closeBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        closeChartPopup();
+      });
+      if (dlg) dlg.addEventListener('close', restoreChartFromPopup);
+      if (dlg) dlg.addEventListener('cancel', function(e){
+        e.preventDefault();
+        closeChartPopup();
+      });
+      window.addEventListener('resize', function(){
+        if (chartPopupState.wrap) syncPopupChartSize();
+      });
+    }
+  }
+  initChartClickExpand();
 </script>
 </body>
 </html>
