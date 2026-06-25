@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Post-event survey report for the 2026 UCLA AI Symposium: response rates, satisfaction ratings, session feedback, and open-ended comments. Includes accessible data tables for all charts.">
 <title>2026 UCLA AI Symposium — Post-Event Survey Report</title>
 <style>
   :root {
@@ -35,13 +36,42 @@
     border-radius: 0 0 8px 0;
   }
   .skip-link:focus { left: 0; }
+  .skip-link:nth-of-type(2):focus { left: 0; top: 44px; }
   a:focus, button:focus, summary:focus, details:focus-visible {
     outline: 3px solid #FFB81C;
     outline-offset: 2px;
   }
   .sr-table-wrap { margin: 6px 0 0; }
   .sr-table-wrap table { font-size: .85rem; }
-  .sr-table-wrap caption { text-align: left; font-weight: 600; color: var(--muted); padding: 4px 0; }
+  .sr-table-wrap caption { text-align: left; font-weight: 600; color: var(--ink); padding: 8px 0 6px; }
+  .chart-figure { margin: 0; }
+  .chart-visual canvas { display: block; pointer-events: auto; }
+  .chart-data {
+    margin-top: 10px;
+    font-size: .88rem;
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+  }
+  .chart-data summary {
+    cursor: pointer;
+    color: var(--ucla-blue);
+    font-weight: 600;
+    list-style: revert;
+  }
+  .chart-data .sr-table-wrap { margin-top: 10px; }
+  .chart-sr-note { font-size: .85rem; color: var(--muted); margin: 0 0 10px; }
+  .chart-sr-note .sample-key { font-weight: 700; }
+  .chart-sr-note .sample-key .key-red { color: #bc4749; }
+  .pct { font-size: .88rem; font-weight: 600; color: var(--ink); margin-left: 8px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    canvas { transition: none !important; }
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
@@ -113,6 +143,8 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
     margin: 24px 0 8px;
+    list-style: none;
+    padding: 0;
   }
   .stat {
     background: var(--bg-soft);
@@ -133,7 +165,29 @@
     color: var(--ink);
     margin-top: 6px;
   }
-  .stat .detail {
+  .stats .stat { list-style: none; margin: 0; }
+  .stat-inner dd { margin: 0; }
+  .stat-inner {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-inner dd.value {
+    order: 1;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--ucla-dark);
+    line-height: 1;
+  }
+  .stat-inner dt {
+    order: 2;
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 6px;
+  }
+  .stat-inner dd.detail {
+    order: 3;
     font-size: .78rem;
     color: var(--muted);
     margin-top: 5px;
@@ -162,6 +216,18 @@
     border-bottom: 1px solid var(--line);
   }
   tbody tr:nth-child(even) { background: var(--bg-soft); }
+  tbody tr.group-row td {
+    font-weight: 700;
+    background: #eef4f9;
+    border-top: 2px solid var(--line);
+  }
+  tbody tr.sub-row td {
+    color: var(--muted);
+    font-size: .93rem;
+  }
+  tbody tr.sub-row td:first-child { padding-left: 28px; }
+  tbody tr.group-row .bar { background: var(--ucla-dark); }
+  tbody tr.sub-row .bar { background: #5a9fd4; }
 
   /* Bar in table */
   .barcell { min-width: 120px; }
@@ -328,7 +394,7 @@
     footer { padding: 16px 0 0; }
     h2 { break-after: avoid; }
     .chart-box, table, blockquote.q, .miniquote, .stat, .note, .callout,
-    details.appendix, details.qdrop, .q-item { break-inside: avoid; page-break-inside: avoid; }
+    details.appendix, details.qdrop, details.chart-data, .q-item { break-inside: avoid; page-break-inside: avoid; }
     /* expand all dropdowns so their content prints */
     details > summary { color: var(--ucla-dark); }
     details[open] .chart-wrap { height: 280px; }
@@ -352,10 +418,32 @@
     gap: 18px;
   }
   .chart-wrap { position: relative; height: 300px; }
+  .chart-html-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--ink);
+    border: 1px solid rgba(0, 59, 92, 0.12);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+    transform: translate(-50%, calc(-100% - 10px));
+    opacity: 0;
+    transition: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  }
+  .chart-html-tooltip.is-visible { opacity: 1; }
+  .chart-html-tooltip .tip-title { font-weight: 700; margin-bottom: 2px; }
   .chart-wrap.tall { height: 360px; }
-  .chart-wrap.combo { height: 340px; }
+  .chart-wrap.combo { height: 400px; }
+  .chart-wrap.combo.tall { height: 440px; }
   .chart-wrap.expo { height: 320px; }
   .chart-wrap.expo-dist { height: 340px; }
+  .chart-wrap.div-stack { height: 180px; }
   @media (max-width: 680px) {
     .chart-grid { grid-template-columns: 1fr; }
   }
@@ -363,6 +451,7 @@
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#satisfaction-ratings" class="skip-link">Skip to satisfaction ratings</a>
 <button class="print-btn" onclick="printReport()" aria-label="Print or save this report as PDF">⎙ Print / Save as PDF</button>
 <div class="page">
   <header class="hero">
@@ -379,14 +468,14 @@
     <h2><span class="num">1</span>Overview</h2>
     <p class="lead">This report summarizes feedback from the post-event survey for the 2026 UCLA Teaching Symposium (<em>Adapting Instruction in the Age of AI</em>). It covers four areas — the overall experience, the keynote and faculty panel, the concurrent sessions, and the Tech Expo and Social Hour — along with open-ended comments, and is intended to inform future AI-related teaching and learning programming. The headline figures are below.</p>
 
-    <div class="stats">
-      <div class="stat"><div class="big">50</div><div class="label">Total responses</div><div class="detail">Submissions to the post-event survey, collected June 9–18, 2026.</div></div>
-      <div class="stat"><div class="big">49</div><div class="label">Completed (98%)</div><div class="detail">Finished the full survey; only one response was partial.</div></div>
-      <div class="stat"><div class="big">~17%</div><div class="label">Response rate</div><div class="detail">50 of 292 eligible attendees, excluding 33 TLC staff.</div></div>
-      <div class="stat"><div class="big">30</div><div class="label">Written comments</div><div class="detail">Open-ended responses (60% of respondents) in Appendix 1.</div></div>
-      <div class="stat"><div class="big">14</div><div class="label">Divisions / schools</div><div class="detail">Represented across campus, plus ~28 departments.</div></div>
-      <div class="stat"><div class="big">4.6/5</div><div class="label">Top satisfaction item</div><div class="detail">"Content was relevant to my work" — 98% agreed.</div></div>
-    </div>
+    <ul class="stats" aria-label="Key survey metrics">
+      <li class="stat"><dl class="stat-inner"><dt>Total responses</dt><dd class="value">50</dd><dd class="detail">Submissions to the post-event survey, collected June 9–18, 2026.</dd></dl></li>
+      <li class="stat"><dl class="stat-inner"><dt>Completed (98%)</dt><dd class="value">49</dd><dd class="detail">Finished the full survey; only one response was partial.</dd></dl></li>
+      <li class="stat"><dl class="stat-inner"><dt>Response rate</dt><dd class="value">~17%</dd><dd class="detail">50 of 292 eligible attendees, excluding 33 TLC staff.</dd></dl></li>
+      <li class="stat"><dl class="stat-inner"><dt>Written comments</dt><dd class="value">30</dd><dd class="detail">Open-ended responses (60% of respondents) in Appendix 1.</dd></dl></li>
+      <li class="stat"><dl class="stat-inner"><dt>Division groupings</dt><dd class="value">6</dd><dd class="detail">L&amp;S, Engineering, professional health, and other campus units.</dd></dl></li>
+      <li class="stat"><dl class="stat-inner"><dt>Top satisfaction item</dt><dd class="value">4.6/5</dd><dd class="detail">"Content was relevant to my work" — 98% agreed.</dd></dl></li>
+    </ul>
     <p class="tablenote"><strong>Response rate:</strong> 50 responses ÷ 292 eligible attendees ≈ 17%. The reconciled attendee total was 325 (176 in-person + 149 Zoom); 33 TLC staff (30 in-person, 3 Zoom) are excluded from the denominator, while presenters and expo partners are retained. Including TLC staff, the rate would be ≈ 15% (50 ÷ 325).</p>
 
     <div class="note">
@@ -396,46 +485,77 @@
     <h2><span class="num">2</span>Who Responded</h2>
 
     <h3>Primary role at UCLA <span style="color:var(--muted);font-weight:400">(n = 50)</span></h3>
-    <table>
+    <table id="table-role">
       <caption class="visually-hidden">Respondents by primary role at UCLA (n = 50)</caption>
       <thead><tr><th scope="col">Role</th><th scope="col" class="num">Count</th><th scope="col" class="barcell">Share</th></tr></thead>
       <tbody>
-        <tr><td>Faculty: Lecturer, Adjunct, or Clinical series</td><td class="num">14</td><td><span class="bar" style="width:140px"></span></td></tr>
-        <tr><td>Faculty: Regular Professor series</td><td class="num">14</td><td><span class="bar" style="width:140px"></span></td></tr>
-        <tr><td>Staff</td><td class="num">7</td><td><span class="bar" style="width:70px"></span></td></tr>
-        <tr><td>Faculty: Professor of Teaching series</td><td class="num">4</td><td><span class="bar" style="width:40px"></span></td></tr>
-        <tr><td>TA / Graduate Student</td><td class="num">3</td><td><span class="bar" style="width:30px"></span></td></tr>
-        <tr><td>UCLA Extension Instructor</td><td class="num">3</td><td><span class="bar" style="width:30px"></span></td></tr>
-        <tr><td>Academic Administrator / Coordinator</td><td class="num">2</td><td><span class="bar" style="width:20px"></span></td></tr>
-        <tr><td>Other</td><td class="num">2</td><td><span class="bar" style="width:20px"></span></td></tr>
-        <tr><td>Postdoctoral Scholar</td><td class="num">1</td><td><span class="bar" style="width:10px"></span></td></tr>
+        <tr><td>Faculty: Lecturer, Adjunct, or Clinical series</td><td class="num">14</td><td class="barcell"><span class="bar" style="width:140px" aria-hidden="true"></span><span class="pct">28%</span></td></tr>
+        <tr><td>Faculty: Regular Professor series</td><td class="num">14</td><td class="barcell"><span class="bar" style="width:140px" aria-hidden="true"></span><span class="pct">28%</span></td></tr>
+        <tr><td>Staff</td><td class="num">7</td><td class="barcell"><span class="bar" style="width:70px" aria-hidden="true"></span><span class="pct">14%</span></td></tr>
+        <tr><td>Faculty: Professor of Teaching series</td><td class="num">4</td><td class="barcell"><span class="bar" style="width:40px" aria-hidden="true"></span><span class="pct">8%</span></td></tr>
+        <tr><td>TA / Graduate Student</td><td class="num">3</td><td class="barcell"><span class="bar" style="width:30px" aria-hidden="true"></span><span class="pct">6%</span></td></tr>
+        <tr><td>UCLA Extension Instructor</td><td class="num">3</td><td class="barcell"><span class="bar" style="width:30px" aria-hidden="true"></span><span class="pct">6%</span></td></tr>
+        <tr><td>Academic Administrator / Coordinator</td><td class="num">2</td><td class="barcell"><span class="bar" style="width:20px" aria-hidden="true"></span><span class="pct">4%</span></td></tr>
+        <tr><td>Other</td><td class="num">2</td><td class="barcell"><span class="bar" style="width:20px" aria-hidden="true"></span><span class="pct">4%</span></td></tr>
+        <tr><td>Postdoctoral Scholar</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
       </tbody>
     </table>
     <div class="chart-box">
-      <div class="chart-title">Faculty vs. non-faculty</div>
-      <div class="chart-wrap"><canvas id="chartFacultyMix" role="img" aria-label="Doughnut chart of respondents by role group: Faculty 64% (32), Staff 14% (7), Students 6% (3), Extension Instructors 6% (3), Administrators 4% (2), Other 4% (2), Postdoctoral Scholar 2% (1). Full counts are in the role table above."></canvas></div>
+      <figure class="chart-figure" aria-labelledby="chartFacultyMix-title">
+      <p class="chart-title" id="chartFacultyMix-title">Faculty vs. non-faculty (visual summary)</p>
+      <p class="chart-sr-note">Decorative chart. Equivalent data: Primary role table above. Slices with n ≥ 3 show count and percent on chart; hover any slice for role name, count, and percent.</p>
+      <div class="chart-visual">
+      <div class="chart-wrap"><canvas id="chartFacultyMix"></canvas></div>
+      </div>
+      </figure>
+      <p class="tablenote">Smaller groups (not labeled on chart): Admin 2 (4%), Other 2 (4%), Postdoc 1 (2%).</p>
       <details class="qdrop"><summary>Survey question</summary><div class="qbody"><strong>Q5.</strong> Primary role at UCLA <span class="q-meta">(single-select dropdown: Faculty — Regular Professor series; Faculty — Lecturer, Adjunct, or Clinical series; Faculty — Professor of Teaching series; Postdoctoral Scholar; TA/Graduate Student; Staff; Academic Administrator/Coordinator; Other; UCLA Extension Instructor)</span></div></details>
     </div>
     <div class="callout"><p>Faculty constituted the large majority of respondents — <strong>32 of 50 (64%)</strong> across the three faculty series. Staff (7) represented the next largest group, and the three student respondents were all at the doctoral level.</p></div>
 
     <h3>Primary Division or School <span style="color:var(--muted);font-weight:400">(n = 49; 1 blank)</span></h3>
     <table>
-      <caption class="visually-hidden">Respondents by primary division or school (n = 49)</caption>
+      <caption class="visually-hidden">Respondents by primary division or school, grouped (n = 49)</caption>
       <thead><tr><th scope="col">Division / School</th><th scope="col" class="num">Count</th><th scope="col" class="barcell">Share</th></tr></thead>
       <tbody>
-        <tr><td>Life Sciences</td><td class="num">8</td><td><span class="bar" style="width:160px"></span></td></tr>
-        <tr><td>Public Health</td><td class="num">6</td><td><span class="bar" style="width:120px"></span></td></tr>
-        <tr><td>Engineering</td><td class="num">6</td><td><span class="bar" style="width:120px"></span></td></tr>
-        <tr><td>Nursing</td><td class="num">5</td><td><span class="bar" style="width:100px"></span></td></tr>
-        <tr><td>Humanities</td><td class="num">5</td><td><span class="bar" style="width:100px"></span></td></tr>
-        <tr><td>Other</td><td class="num">5</td><td><span class="bar" style="width:100px"></span></td></tr>
-        <tr><td>Medicine</td><td class="num">4</td><td><span class="bar" style="width:80px"></span></td></tr>
-        <tr><td>Dentistry, Social Sciences, UCLA Extension</td><td class="num">2</td><td><span class="bar" style="width:40px"></span></td></tr>
-        <tr><td>Education &amp; Information Studies, Arts and Architecture, Management, Physical Sciences</td><td class="num">1</td><td><span class="bar" style="width:20px"></span></td></tr>
+        <tr class="group-row"><td>L&amp;S (all)</td><td class="num">16</td><td class="barcell"><span class="bar" style="width:160px" aria-hidden="true"></span><span class="pct">33%</span></td></tr>
+        <tr class="sub-row"><td>LS — Life Sciences</td><td class="num">8</td><td class="barcell"><span class="bar" style="width:80px" aria-hidden="true"></span><span class="pct">16%</span></td></tr>
+        <tr class="sub-row"><td>PS — Physical Sciences</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
+        <tr class="sub-row"><td>Humanities</td><td class="num">5</td><td class="barcell"><span class="bar" style="width:50px" aria-hidden="true"></span><span class="pct">10%</span></td></tr>
+        <tr class="sub-row"><td>SS — Social Sciences</td><td class="num">2</td><td class="barcell"><span class="bar" style="width:20px" aria-hidden="true"></span><span class="pct">4%</span></td></tr>
+        <tr class="group-row"><td>Engineering</td><td class="num">6</td><td class="barcell"><span class="bar" style="width:60px" aria-hidden="true"></span><span class="pct">12%</span></td></tr>
+        <tr class="group-row"><td>Professional Health (all)</td><td class="num">17</td><td class="barcell"><span class="bar" style="width:170px" aria-hidden="true"></span><span class="pct">35%</span></td></tr>
+        <tr class="sub-row"><td>Public Health</td><td class="num">6</td><td class="barcell"><span class="bar" style="width:60px" aria-hidden="true"></span><span class="pct">12%</span></td></tr>
+        <tr class="sub-row"><td>Nursing</td><td class="num">5</td><td class="barcell"><span class="bar" style="width:50px" aria-hidden="true"></span><span class="pct">10%</span></td></tr>
+        <tr class="sub-row"><td>Med — Medicine</td><td class="num">4</td><td class="barcell"><span class="bar" style="width:40px" aria-hidden="true"></span><span class="pct">8%</span></td></tr>
+        <tr class="sub-row"><td>DDS — Dentistry</td><td class="num">2</td><td class="barcell"><span class="bar" style="width:20px" aria-hidden="true"></span><span class="pct">4%</span></td></tr>
+        <tr class="group-row"><td>Other professional schools (all)</td><td class="num">3</td><td class="barcell"><span class="bar" style="width:30px" aria-hidden="true"></span><span class="pct">6%</span></td></tr>
+        <tr class="sub-row"><td>Education &amp; Information Studies</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
+        <tr class="sub-row"><td>Arts and Architecture</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
+        <tr class="sub-row"><td>Management</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
+        <tr class="group-row"><td>UCLA Extension</td><td class="num">2</td><td class="barcell"><span class="bar" style="width:20px" aria-hidden="true"></span><span class="pct">4%</span></td></tr>
+        <tr class="group-row"><td>Other (edited)</td><td class="num">5</td><td class="barcell"><span class="bar" style="width:50px" aria-hidden="true"></span><span class="pct">10%</span></td></tr>
+        <tr class="sub-row"><td>Library</td><td class="num">2</td><td class="barcell"><span class="bar" style="width:20px" aria-hidden="true"></span><span class="pct">4%</span></td></tr>
+        <tr class="sub-row"><td>UCLA Library</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
+        <tr class="sub-row"><td>Digital Technology Solutions</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
+        <tr class="sub-row"><td>Undergraduate Education</td><td class="num">1</td><td class="barcell"><span class="bar" style="width:10px" aria-hidden="true"></span><span class="pct">2%</span></td></tr>
       </tbody>
     </table>
-    <p class="tablenote">The final two rows group divisions that share the same count; the Count column shows the per-division total (2 or 1), not a sum. <em>Survey question — Q9: Primary Division or School (single-select dropdown of UCLA divisions and schools).</em></p>
-    <p>Respondents represented <strong>14 divisions and schools</strong>, reflecting broad cross-campus participation spanning the STEM disciplines, the health sciences, and the humanities.</p>
+    <div class="chart-box">
+      <figure class="chart-figure" aria-labelledby="chartDivision-title">
+      <p class="chart-title" id="chartDivision-title">Primary Division or School — share of respondents (n = 49)</p>
+      <p class="chart-sr-note">Decorative chart. 100% stacked bar of the six top-level groups from the table above (sub-rows are in the table only). The three largest groups are highlighted; remaining groups are grey. Hover any segment for count and percent.</p>
+      <div class="chart-visual">
+      <div class="chart-wrap div-stack"><canvas id="chartDivision"></canvas></div>
+      </div>
+      <details class="chart-data">
+        <summary>View data table (accessible alternative to chart)</summary>
+      <div class="sr-table-wrap"><table><caption>Primary Division or School — top-level groups (n = 49)</caption><thead><tr><th scope="col">Group</th><th scope="col">Count</th><th scope="col">Share</th></tr></thead><tbody><tr><td>L&amp;S (all)</td><td>16</td><td>33%</td></tr><tr><td>Engineering</td><td>6</td><td>12%</td></tr><tr><td>Professional Health (all)</td><td>17</td><td>35%</td></tr><tr><td>Other professional schools (all)</td><td>3</td><td>6%</td></tr><tr><td>UCLA Extension</td><td>2</td><td>4%</td></tr><tr><td>Other (edited)</td><td>5</td><td>10%</td></tr></tbody></table></div>
+      </details>
+      </figure>
+    </div>
+    <p class="tablenote">Grouped for readability. <em>L&amp;S</em> sub-rows are UCLA College divisions (Life Sciences, Physical Sciences, Humanities, Social Sciences). <em>Professional Health</em> includes Public Health, Nursing, Medicine, and Dentistry. <em>Other professional schools</em> includes Education &amp; Information Studies, Arts and Architecture, Management, and similar standalone schools. <em>Other (edited)</em> shows free-text responses when no dropdown option fit. <em>Survey question — Q9: Primary Division or School (single-select dropdown).</em></p>
+    <p>Respondents spanned <strong>L&amp;S divisions (16)</strong>, <strong>Engineering (6)</strong>, <strong>professional health schools (17)</strong>, other professional schools (3), UCLA Extension (2), and other campus units (5) — reflecting broad cross-campus participation across STEM, health sciences, and the humanities.</p>
 
     <h3>Department / Academic Program <span style="color:var(--muted);font-weight:400">(n = 47; 3 blank)</span></h3>
     <p>Responses originated from approximately <strong>28 distinct departments and academic programs</strong>. The most frequently represented were Nursing (6), Community Health Sciences (3), and Psychology (3), while Computer Science, Statistics, Philosophy, Electrical Engineering, Epidemiology, and Dentistry each contributed two respondents. The remaining departments were represented by a single respondent each (for example, Bioengineering, Linguistics, Architecture and Urban Design, English, Sociology, and Education), underscoring the breadth of disciplinary interest in the symposium.</p>
@@ -456,13 +576,20 @@
     <details class="qdrop"><summary>Survey question</summary><div class="qbody"><strong>Q23.</strong> Concurrent Sessions — Which Session(s) did you attend? <span class="q-meta">(check all that apply)</span><ul><li>Round 1: Ethics, Integrity, &amp; Equity: What Do We Gain &amp; Lose with GenAI in Higher Ed?</li><li>Round 1: Using AI Tools in the Classroom Flash Talks</li><li>Round 2: Evaluating &amp; Applying AI Tools: How to Navigate a Changing Landscape</li><li>Round 2: Building an AI Ethics Writing Curriculum Across Engineering and the Humanities Flash Talks</li><li>Choose Your Own A(I)dventure Roundtables (Rounds 1 or 2)</li></ul></div></details>
     <p>A notable share of respondents attended <strong>remotely via Zoom</strong>, as confirmed by the open-ended comments. These attendees were necessarily unable to participate in the in-person Tech Expo and Social Hour; we assume most did not answer the corresponding survey items (see the interpretation note in Section 1).</p>
 
-    <h2><span class="num">4</span>Satisfaction Ratings</h2>
-    <p class="lead">All items use a 5-point agreement scale: 1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree. Full question wording is in <a href="#appendix2">Appendix 2 — Survey Instrument</a>.</p>
+    <h2 id="satisfaction-ratings"><span class="num">4</span>Satisfaction Ratings</h2>
+    <p class="lead">All items use a 5-point agreement scale: 1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree. Full question wording is in <a href="#appendix2">Appendix 2 — Survey Instrument</a>. Every chart in this section has an equivalent data table — expand <strong>View data table</strong> below the chart, or use the rating tables in each subsection.</p>
 
     <div class="chart-box">
-      <div class="chart-title">Average rating by symposium component (mean, 1–5)</div>
-      <div class="chart-wrap"><canvas id="chartComponents" role="img" aria-label="Bar chart of mean rating by component on a 1 to 5 scale: Overall Experience 4.34, Keynote and Panel 4.41, Concurrent Sessions 4.18, Tech Expo and Social Hour 3.95."></canvas></div>
-      <div class="sr-table-wrap visually-hidden"><table><caption>Mean rating by symposium component (1–5 scale)</caption><thead><tr><th scope="col">Component</th><th scope="col">Mean</th></tr></thead><tbody><tr><td>Overall Experience</td><td>4.34</td></tr><tr><td>Keynote &amp; Panel</td><td>4.41</td></tr><tr><td>Concurrent Sessions</td><td>4.18</td></tr><tr><td>Tech Expo &amp; Social Hour</td><td>3.95</td></tr></tbody></table></div>
+      <figure class="chart-figure" aria-labelledby="chartComponents-title">
+      <p class="chart-title" id="chartComponents-title">Average rating by symposium component (mean, 1–5)</p>
+      <div class="chart-visual">
+      <div class="chart-wrap"><canvas id="chartComponents"></canvas></div>
+      </div>
+      <details class="chart-data">
+        <summary>View data table (accessible alternative to chart)</summary>
+      <div class="sr-table-wrap"><table><caption>Mean rating by symposium component (1–5 scale)</caption><thead><tr><th scope="col">Component</th><th scope="col">Mean</th><th scope="col">n</th></tr></thead><tbody><tr><td>Overall Experience</td><td>4.34</td><td>50</td></tr><tr><td>Keynote &amp; Panel</td><td>4.41</td><td>47</td></tr><tr><td>Concurrent Sessions</td><td>4.18</td><td>32</td></tr><tr><td>Tech Expo &amp; Social Hour</td><td>3.95</td><td>24</td></tr></tbody></table></div>
+      </details>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody">Each bar averages all rating items within that component (5-point Agreement scale):<ul><li><strong>Overall Experience</strong> — Q21 (4 items)</li><li><strong>Keynote &amp; Panel</strong> — Q22 (3 items)</li><li><strong>Concurrent Sessions</strong> — Q24–Q28 (3 items each, across attended sessions)</li><li><strong>Tech Expo &amp; Social Hour</strong> — Q29 (4 items)</li></ul>Full item wording appears in the dropdowns for each component below and in <a href="#appendix2">Appendix 2 — Survey Instrument</a>.</div></details>
     </div>
 
@@ -491,15 +618,27 @@
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">Overall experience — mean vs. % who agreed (4–5)</div>
-      <div class="chart-wrap combo"><canvas id="chartOverall" role="img" aria-label="Combination chart showing mean rating and percent who agreed for four overall-experience items. Relevant to my work: mean 4.64, 98% agree. Practical ideas to apply: mean 4.28, 88% agree. Format and engagement: mean 4.24, 78% agree. New perspectives: mean 4.18, 84% agree. The same figures appear in the Overall Symposium Experience table above."></canvas></div>
+      <figure class="chart-figure" aria-labelledby="chartOverall-title">
+      <p class="chart-title" id="chartOverall-title">Overall experience — mean vs. % who agreed (4–5)</p>
+      <p class="chart-sr-note">Decorative chart. Equivalent data: Overall Symposium Experience table above (mean and % Agree columns).</p>
+      <div class="chart-visual">
+      <div class="chart-wrap combo"><canvas id="chartOverall"></canvas></div>
+      </div>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q21.</strong> Overall Symposium Experience <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The symposium content was relevant to my professional interests and responsibilities.</li><li>The symposium provided practical ideas or strategies that I can apply in my professional practice.</li><li>The symposium format supported meaningful engagement.</li><li>The symposium exposed me to perspectives on AI that I had not previously considered.</li></ul></div></details>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">Overall experience — distribution of responses (n = 50)</div>
-      <div class="chart-wrap"><canvas id="chartOverallDist" role="img" aria-label="Stacked bar chart of response counts for four overall-experience items, on a 1 to 5 agreement scale. Full counts are given in the data table that follows."></canvas></div>
-      <div class="sr-table-wrap visually-hidden"><table><caption>Overall experience — response counts by item (n = 50)</caption><thead><tr><th scope="col">Item</th><th scope="col">Strongly Disagree</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Relevant to my work</td><td>0</td><td>0</td><td>1</td><td>16</td><td>33</td></tr><tr><td>Practical ideas to apply</td><td>0</td><td>0</td><td>6</td><td>24</td><td>20</td></tr><tr><td>Format / engagement</td><td>0</td><td>0</td><td>11</td><td>16</td><td>23</td></tr><tr><td>New perspectives</td><td>0</td><td>2</td><td>6</td><td>23</td><td>19</td></tr></tbody></table></div>
+      <figure class="chart-figure" aria-labelledby="chartOverallDist-title">
+      <p class="chart-title" id="chartOverallDist-title">Overall experience — distribution of responses (n = 50)</p>
+      <div class="chart-visual">
+      <div class="chart-wrap"><canvas id="chartOverallDist"></canvas></div>
+      </div>
+      <details class="chart-data">
+        <summary>View data table (accessible alternative to chart)</summary>
+      <div class="sr-table-wrap"><table><caption>Overall experience — response counts by item (n = 50)</caption><thead><tr><th scope="col">Item</th><th scope="col">Strongly Disagree</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Relevant to my work</td><td>0</td><td>0</td><td>1</td><td>16</td><td>33</td></tr><tr><td>Practical ideas to apply</td><td>0</td><td>0</td><td>6</td><td>24</td><td>20</td></tr><tr><td>Format / engagement</td><td>0</td><td>0</td><td>11</td><td>16</td><td>23</td></tr><tr><td>New perspectives</td><td>0</td><td>2</td><td>6</td><td>23</td><td>19</td></tr></tbody></table></div>
+      </details>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q21.</strong> Overall Symposium Experience <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The symposium content was relevant to my professional interests and responsibilities.</li><li>The symposium provided practical ideas or strategies that I can apply in my professional practice.</li><li>The symposium format supported meaningful engagement.</li><li>The symposium exposed me to perspectives on AI that I had not previously considered.</li></ul></div></details>
     </div>
 
@@ -522,41 +661,74 @@
       <thead><tr><th scope="col">Session</th><th scope="col" class="num">n</th><th scope="col" class="num">Mean</th><th scope="col">Note</th></tr></thead>
       <tbody>
         <tr><td>Round 1: Using AI Tools in the Classroom</td><td class="num">16</td><td class="num"><strong>~4.56</strong></td><td>Highest-rated; 100% found ideas applicable</td></tr>
-        <tr><td>Round 2: Evaluating &amp; Applying AI Tools</td><td class="num">14</td><td class="num">~4.31</td><td>Strong</td></tr>
-        <tr><td>Round 1: Ethics, Integrity, &amp; Equity</td><td class="num">13</td><td class="num">~3.85</td><td>Moderate</td></tr>
-        <tr><td>Round 2: Building an AI Ethics Writing Curriculum</td><td class="num">6</td><td class="num">~3.61</td><td><span class="badge mid">⚠ small sample (n &lt; 10)</span></td></tr>
-        <tr><td>Choose Your Own A(I)dventure Roundtables</td><td class="num">2</td><td class="num">3.50</td><td><span class="badge mid">⚠ small sample (n &lt; 10)</span></td></tr>
+        <tr><td>Round 2: Evaluating &amp; Applying AI Tools</td><td class="num">14</td><td class="num">~4.31</td><td>Mean well above neutral (~4.3/5)</td></tr>
+        <tr><td>Round 1: Ethics, Integrity, &amp; Equity</td><td class="num">13</td><td class="num">~3.85</td><td>Mean closer to neutral; more mixed responses</td></tr>
+        <tr><td>Round 2: Building an AI Ethics Writing Curriculum</td><td class="num">6</td><td class="num">~3.61</td><td><span class="badge mid">Small sample (n &lt; 10)</span></td></tr>
+        <tr><td>Choose Your Own A(I)dventure Roundtables</td><td class="num">2</td><td class="num">3.50</td><td><span class="badge mid">Small sample (n &lt; 10)</span></td></tr>
       </tbody>
     </table>
-    <p class="tablenote"><strong>Mean</strong> shown here is the average of the three rating items asked for each session (relevance, new knowledge, and applicability), across the respondents who attended that session (<em>n</em>).</p>
+    <p class="tablenote"><strong>Mean</strong> shown here is the average of the three rating items asked for each session (relevance, new knowledge, and applicability), across the respondents who attended that session (<em>n</em>). Notes describe the mean on the 1–5 agreement scale (3 = Neutral), not a separate “applicability” score.</p>
     <p class="tableexplain">The practical, tool-focused sessions rated highest — <strong>Using AI Tools in the Classroom</strong> led the field (mean ~4.56), with every attendee finding the ideas applicable. The discussion-oriented ethics sessions scored more modestly. The two lowest-rated sessions were each based on fewer than 10 responses, so their averages are not statistically reliable and should be read as indicative only.</p>
 
     <div class="chart-box">
-      <div class="chart-title">Concurrent sessions — mean rating (bubble size ∝ attendees · red outline = small sample, n &lt; 10)</div>
-      <div class="chart-wrap"><canvas id="chartConcurrent" role="img" aria-label="Bubble chart of mean rating per concurrent session on a 1 to 5 scale, with bubble size proportional to attendees. Using AI Tools: 4.56 (n=16). Evaluating and Applying: 4.31 (n=14). Ethics, Integrity and Equity: 3.85 (n=13). Building AI Ethics Writing: 3.61 (n=6, small sample). Choose Your Own A(I)dventure: 3.50 (n=2, small sample). These means also appear in the concurrent sessions table above."></canvas></div>
+      <figure class="chart-figure" aria-labelledby="chartConcurrent-title">
+      <p class="chart-title" id="chartConcurrent-title">Concurrent sessions — mean vs. % who agreed (4–5)</p>
+      <p class="chart-sr-note">Decorative chart. Equivalent data: Concurrent Sessions table above. <span class="sample-key"><span class="key-red">Red</span> outline = small sample (n &lt; 10).</span></p>
+      <div class="chart-visual">
+      <div class="chart-wrap combo tall"><canvas id="chartConcurrent"></canvas></div>
+      </div>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody">Each attended session (Q24–Q28) asked the same three items <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span>:<ul><li>The concurrent session content was relevant to my instructional needs.</li><li>I gained new knowledge or perspectives from the concurrent session I attended.</li><li>The concurrent session provided ideas or approaches that I can apply in my professional practice.</li></ul></div></details>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">Concurrent sessions — response distribution (3 rating items pooled)</div>
-      <div class="chart-wrap tall"><canvas id="chartConcurrentDist" role="img" aria-label="Stacked bar chart showing the count and percentage distribution of pooled responses per session on a 1 to 5 agreement scale. Segment labels show N (percent). Full counts are in the data table that follows."></canvas></div>
-      <div class="sr-table-wrap visually-hidden"><table><caption>Concurrent sessions — pooled response counts (3 items combined)</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th><th scope="col">Total</th></tr></thead><tbody><tr><td>Using AI Tools (n=16)</td><td>0</td><td>2</td><td>17</td><td>29</td><td>48</td></tr><tr><td>Evaluating &amp; Applying (n=14)</td><td>3</td><td>2</td><td>16</td><td>21</td><td>42</td></tr><tr><td>Ethics, Integrity &amp; Equity (n=13)</td><td>4</td><td>6</td><td>21</td><td>8</td><td>39</td></tr><tr><td>Building AI Ethics Writing (n=6, small)</td><td>3</td><td>5</td><td>6</td><td>4</td><td>18</td></tr><tr><td>Choose Your Own A(I)dventure (n=2, small)</td><td>0</td><td>3</td><td>3</td><td>0</td><td>6</td></tr></tbody></table></div>
+      <figure class="chart-figure" aria-labelledby="chartConcurrentDist-title">
+      <p class="chart-title" id="chartConcurrentDist-title">Concurrent sessions — response distribution (3 rating items pooled)</p>
+      <div class="chart-visual">
+      <div class="chart-wrap tall"><canvas id="chartConcurrentDist"></canvas></div>
+      </div>
+      <details class="chart-data">
+        <summary>View data table (accessible alternative to chart)</summary>
+      <div class="sr-table-wrap"><table><caption>Concurrent sessions — pooled response counts (3 items combined)</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th><th scope="col">Total</th></tr></thead><tbody><tr><td>Using AI Tools (n=16)</td><td>0</td><td>2</td><td>17</td><td>29</td><td>48</td></tr><tr><td>Evaluating &amp; Applying (n=14)</td><td>3</td><td>2</td><td>16</td><td>21</td><td>42</td></tr><tr><td>Ethics, Integrity &amp; Equity (n=13)</td><td>4</td><td>6</td><td>21</td><td>8</td><td>39</td></tr><tr><td>Building AI Ethics Writing (n=6, small sample)</td><td>3</td><td>5</td><td>6</td><td>4</td><td>18</td></tr><tr><td>Choose Your Own A(I)dventure (n=2, small sample)</td><td>0</td><td>3</td><td>3</td><td>0</td><td>6</td></tr></tbody></table></div>
+      </details>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody">Each attended session (Q24–Q28) asked the same three items <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span>:<ul><li>The concurrent session content was relevant to my instructional needs.</li><li>I gained new knowledge or perspectives from the concurrent session I attended.</li><li>The concurrent session provided ideas or approaches that I can apply in my professional practice.</li></ul></div></details>
     </div>
-    <p class="tablenote">Each bar pools the three rating items for that session (relevance, new knowledge, applicability), so the total number of responses equals 3 × the number of attendees (n). Segment labels show count and percent within each bar; ⚠ marks sessions based on fewer than 10 attendees.</p>
+    <p class="tablenote">Each bar pools the three rating items for that session (relevance, new knowledge, applicability), so the total number of responses equals 3 × the number of attendees (n). Segment labels show count and percent within each bar; sessions with fewer than 10 attendees are marked as small sample.</p>
 
     <details class="qdrop" id="concItemDetails">
       <summary>Show distribution for each survey question separately (per item, by session)</summary>
       <div class="qbody">
-        <div class="chart-title" style="margin-top:12px">Item 1 — "The concurrent session content was relevant to my instructional needs." <span class="q-meta">(count of responses)</span></div>
-        <div class="chart-wrap"><canvas id="chartConcItem1" role="img" aria-label="Stacked bar chart of response counts per session for the item: content was relevant to my instructional needs, on a 1 to 5 scale. Counts are in the data table that follows."></canvas></div>
-        <div class="sr-table-wrap visually-hidden"><table><caption>Item 1 (content relevant) — response counts by session</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Using AI Tools</td><td>0</td><td>1</td><td>7</td><td>8</td></tr><tr><td>Evaluating &amp; Applying</td><td>1</td><td>1</td><td>5</td><td>7</td></tr><tr><td>Ethics, Integrity &amp; Equity</td><td>1</td><td>2</td><td>8</td><td>2</td></tr><tr><td>Building AI Ethics Writing</td><td>1</td><td>2</td><td>2</td><td>1</td></tr><tr><td>Choose Your Own A(I)dventure</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></tbody></table></div>
-        <div class="chart-title" style="margin-top:18px">Item 2 — "I gained new knowledge or perspectives from the concurrent session I attended." <span class="q-meta">(count of responses)</span></div>
-        <div class="chart-wrap"><canvas id="chartConcItem2" role="img" aria-label="Stacked bar chart of response counts per session for the item: I gained new knowledge or perspectives, on a 1 to 5 scale. Counts are in the data table that follows."></canvas></div>
-        <div class="sr-table-wrap visually-hidden"><table><caption>Item 2 (gained new knowledge) — response counts by session</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Using AI Tools</td><td>0</td><td>1</td><td>5</td><td>10</td></tr><tr><td>Evaluating &amp; Applying</td><td>1</td><td>0</td><td>6</td><td>7</td></tr><tr><td>Ethics, Integrity &amp; Equity</td><td>2</td><td>1</td><td>7</td><td>3</td></tr><tr><td>Building AI Ethics Writing</td><td>1</td><td>1</td><td>3</td><td>1</td></tr><tr><td>Choose Your Own A(I)dventure</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></tbody></table></div>
-        <div class="chart-title" style="margin-top:18px">Item 3 — "The concurrent session provided ideas or approaches that I can apply in my professional practice." <span class="q-meta">(count of responses)</span></div>
-        <div class="chart-wrap"><canvas id="chartConcItem3" role="img" aria-label="Stacked bar chart of response counts per session for the item: provided ideas or approaches I can apply, on a 1 to 5 scale. Counts are in the data table that follows."></canvas></div>
-        <div class="sr-table-wrap visually-hidden"><table><caption>Item 3 (ideas I can apply) — response counts by session</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Using AI Tools</td><td>0</td><td>0</td><td>5</td><td>11</td></tr><tr><td>Evaluating &amp; Applying</td><td>1</td><td>1</td><td>5</td><td>7</td></tr><tr><td>Ethics, Integrity &amp; Equity</td><td>1</td><td>3</td><td>6</td><td>3</td></tr><tr><td>Building AI Ethics Writing</td><td>1</td><td>2</td><td>1</td><td>2</td></tr><tr><td>Choose Your Own A(I)dventure</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></tbody></table></div>
+        <figure class="chart-figure" aria-labelledby="chartConcItem1-title">
+        <p class="chart-title" id="chartConcItem1-title" style="margin-top:12px">Item 1 — "The concurrent session content was relevant to my instructional needs." <span class="q-meta">(count of responses)</span></p>
+        <div class="chart-visual">
+        <div class="chart-wrap"><canvas id="chartConcItem1"></canvas></div>
+        </div>
+        <details class="chart-data">
+          <summary>View data table (accessible alternative to chart)</summary>
+        <div class="sr-table-wrap"><table><caption>Item 1 (content relevant) — response counts by session</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Using AI Tools</td><td>0</td><td>1</td><td>7</td><td>8</td></tr><tr><td>Evaluating &amp; Applying</td><td>1</td><td>1</td><td>5</td><td>7</td></tr><tr><td>Ethics, Integrity &amp; Equity</td><td>1</td><td>2</td><td>8</td><td>2</td></tr><tr><td>Building AI Ethics Writing</td><td>1</td><td>2</td><td>2</td><td>1</td></tr><tr><td>Choose Your Own A(I)dventure</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></tbody></table></div>
+        </details>
+        </figure>
+        <figure class="chart-figure" aria-labelledby="chartConcItem2-title">
+        <p class="chart-title" id="chartConcItem2-title" style="margin-top:18px">Item 2 — "I gained new knowledge or perspectives from the concurrent session I attended." <span class="q-meta">(count of responses)</span></p>
+        <div class="chart-visual">
+        <div class="chart-wrap"><canvas id="chartConcItem2"></canvas></div>
+        </div>
+        <details class="chart-data">
+          <summary>View data table (accessible alternative to chart)</summary>
+        <div class="sr-table-wrap"><table><caption>Item 2 (gained new knowledge) — response counts by session</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Using AI Tools</td><td>0</td><td>1</td><td>5</td><td>10</td></tr><tr><td>Evaluating &amp; Applying</td><td>1</td><td>0</td><td>6</td><td>7</td></tr><tr><td>Ethics, Integrity &amp; Equity</td><td>2</td><td>1</td><td>7</td><td>3</td></tr><tr><td>Building AI Ethics Writing</td><td>1</td><td>1</td><td>3</td><td>1</td></tr><tr><td>Choose Your Own A(I)dventure</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></tbody></table></div>
+        </details>
+        </figure>
+        <figure class="chart-figure" aria-labelledby="chartConcItem3-title">
+        <p class="chart-title" id="chartConcItem3-title" style="margin-top:18px">Item 3 — "The concurrent session provided ideas or approaches that I can apply in my professional practice." <span class="q-meta">(count of responses)</span></p>
+        <div class="chart-visual">
+        <div class="chart-wrap"><canvas id="chartConcItem3"></canvas></div>
+        </div>
+        <details class="chart-data">
+          <summary>View data table (accessible alternative to chart)</summary>
+        <div class="sr-table-wrap"><table><caption>Item 3 (ideas I can apply) — response counts by session</caption><thead><tr><th scope="col">Session</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Using AI Tools</td><td>0</td><td>0</td><td>5</td><td>11</td></tr><tr><td>Evaluating &amp; Applying</td><td>1</td><td>1</td><td>5</td><td>7</td></tr><tr><td>Ethics, Integrity &amp; Equity</td><td>1</td><td>3</td><td>6</td><td>3</td></tr><tr><td>Building AI Ethics Writing</td><td>1</td><td>2</td><td>1</td><td>2</td></tr><tr><td>Choose Your Own A(I)dventure</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></tbody></table></div>
+        </details>
+        </figure>
       </div>
     </details>
 
@@ -575,14 +747,26 @@
     <p class="tableexplain">Ratings here are shaped largely by participation mode: because the Tech Expo and Social Hour were in-person-only, many respondents who attended remotely could not take part and, we assume, did not answer this question — consistent with only 24 of 50 respondents completing it (26 left it blank). Among those who did respond, ratings were generally positive, and the item on helping attendees <strong>identify campus partners and services</strong> was especially well received.</p>
     <p class="tablenote"><strong>Important measurement caveat:</strong> unlike the concurrent-session questions (which were shown only to attendees via skip-logic), Q29 was presented to all respondents with no attendance filter, and the survey never asked about participation mode. We cannot confirm which respondents actually attended the Expo in person, so these results should be treated as indicative only.</p>
     <div class="chart-box">
-      <div class="chart-title">Tech Expo &amp; Social Hour — mean rating (1–5)</div>
-      <div class="chart-wrap expo"><canvas id="chartExpo" role="img" aria-label="Bar chart of mean rating on a 1 to 5 scale: Identify campus partners 4.04, Tech Expo networking 3.96, Social Hour networking 3.92, Sense of AI developments 3.87. The same figures appear in the Tech Expo and Social Hour table above."></canvas></div>
+      <figure class="chart-figure" aria-labelledby="chartExpo-title">
+      <p class="chart-title" id="chartExpo-title">Tech Expo &amp; Social Hour — mean rating (1–5)</p>
+      <p class="chart-sr-note">Decorative chart. Equivalent data: Tech Expo &amp; Social Hour table above.</p>
+      <div class="chart-visual">
+      <div class="chart-wrap expo"><canvas id="chartExpo"></canvas></div>
+      </div>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q29.</strong> Tech Expo and Social Hour <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The Tech Expo helped me identify campus partners, programs, or services that could support my work.</li><li>The Tech Expo provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Social Hour provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Tech Expo provided me with a better sense of AI developments to support teaching and learning at UCLA.</li></ul></div></details>
     </div>
     <div class="chart-box">
-      <div class="chart-title">Tech Expo &amp; Social Hour — distribution of responses (n ≈ 23–24)</div>
-      <div class="chart-wrap expo-dist"><canvas id="chartExpoDist" role="img" aria-label="Stacked bar chart of response counts for four Tech Expo and Social Hour items on a 1 to 5 agreement scale. Full counts are given in the data table that follows."></canvas></div>
-      <div class="sr-table-wrap visually-hidden"><table><caption>Tech Expo &amp; Social Hour — response counts by item</caption><thead><tr><th scope="col">Item</th><th scope="col">Strongly Disagree</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Identify campus partners</td><td>0</td><td>1</td><td>7</td><td>5</td><td>10</td></tr><tr><td>Tech Expo networking</td><td>0</td><td>0</td><td>8</td><td>8</td><td>7</td></tr><tr><td>Social Hour networking</td><td>0</td><td>1</td><td>9</td><td>5</td><td>9</td></tr><tr><td>Sense of AI developments</td><td>0</td><td>0</td><td>10</td><td>6</td><td>7</td></tr></tbody></table></div>
+      <figure class="chart-figure" aria-labelledby="chartExpoDist-title">
+      <p class="chart-title" id="chartExpoDist-title">Tech Expo &amp; Social Hour — distribution of responses (n ≈ 23–24)</p>
+      <div class="chart-visual">
+      <div class="chart-wrap expo-dist"><canvas id="chartExpoDist"></canvas></div>
+      </div>
+      <details class="chart-data">
+        <summary>View data table (accessible alternative to chart)</summary>
+      <div class="sr-table-wrap"><table><caption>Tech Expo &amp; Social Hour — response counts by item</caption><thead><tr><th scope="col">Item</th><th scope="col">Strongly Disagree</th><th scope="col">Disagree</th><th scope="col">Neutral</th><th scope="col">Agree</th><th scope="col">Strongly Agree</th></tr></thead><tbody><tr><td>Identify campus partners</td><td>0</td><td>1</td><td>7</td><td>5</td><td>10</td></tr><tr><td>Tech Expo networking</td><td>0</td><td>0</td><td>8</td><td>8</td><td>7</td></tr><tr><td>Social Hour networking</td><td>0</td><td>1</td><td>9</td><td>5</td><td>9</td></tr><tr><td>Sense of AI developments</td><td>0</td><td>0</td><td>10</td><td>6</td><td>7</td></tr></tbody></table></div>
+      </details>
+      </figure>
       <details class="qdrop"><summary>Survey questions</summary><div class="qbody"><strong>Q29.</strong> Tech Expo and Social Hour <span class="q-meta">(1 = Strongly Disagree, 2 = Disagree, 3 = Neutral, 4 = Agree, 5 = Strongly Agree)</span><ul><li>The Tech Expo helped me identify campus partners, programs, or services that could support my work.</li><li>The Tech Expo provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Social Hour provided me with opportunities for discussion/networking to enhance my overall experience working with AI.</li><li>The Tech Expo provided me with a better sense of AI developments to support teaching and learning at UCLA.</li></ul></div></details>
     </div>
     <p>Ratings for the Tech Expo and Social Hour should be interpreted primarily in light of participation mode: many respondents attended remotely and could not take part in this in-person activity (see Section 1), and we assume they did not answer this question rather than rating it. Among those who did respond, feedback was positive. Several respondents also offered constructive logistical suggestions, which are summarized in the open-ended feedback below.</p>
@@ -619,17 +803,17 @@
 
     <h3 style="color:var(--warn)">Suggestions and Areas for Improvement</h3>
 
-    <p class="q-item"><strong>Tech Expo logistics.</strong> <span class="theme-count">(2 comments)</span> Respondents offered suggestions on signage, timing, follow-up, and the social framing of the Expo.</p>
-    <div class="miniquote"><span class="ref">#18</span>"The Tech Expo felt too short to visit all the stations meaningfully. It would be very helpful to receive a list of stations in advance … While QR codes were provided for follow-up, I'd prefer to have my questions answered on the spot at the expo itself, rather than being redirected to external websites."</div>
-    <div class="miniquote"><span class="ref">#12</span>"The booths were not sufficiently signposted / set off from the general mingling space. The presence of alcohol also made it feel more 'social' than 'tech'."</div>
-
-    <p class="q-item"><strong>Panel format.</strong> <span class="theme-count">(2 comments)</span> Several respondents expressed a desire for more direct discussion and debate among panelists, as well as additional time for audience questions.</p>
+    <p class="q-item"><strong>Keynote and faculty panel.</strong> <span class="theme-count">(4 comments)</span> These sessions scored highly on the rating scales (87–95% agreement), yet four comments pointed to two separate improvements that work together rather than in tension: <em>who</em> is represented on the program, and <em>how</em> the conversation is run.</p>
+    <p class="tableexplain"><strong>Range of voices:</strong> some respondents wanted more skeptical or non-adopting perspectives included, feeling the tone could skew pro-AI even when important concerns were raised.</p>
+    <div class="miniquote"><span class="ref">#27</span>"I wish that the first panel included critical non-users of AI. It felt very pro-AI. Also, the panel raised many issues with the application of AI in higher education."</div>
+    <div class="miniquote"><span class="ref">#14</span>"I think someone should have made the point that we have to teach students to be experts in something before the students can meaningfully engage a GenAI."</div>
+    <p class="tableexplain"><strong>Session structure:</strong> others sought more panelist-to-panelist debate and additional audience Q&amp;A — changes to format, not to the mix of viewpoints.</p>
     <div class="miniquote"><span class="ref">#19</span>"For panel, I would have like to hear the panelists have a discussion and debate. The ask question/answer misses out on dynamic exchanges which often lead to new insights and perspectives."</div>
     <div class="miniquote"><span class="ref">#30</span>"The two panels would have benefitted from a little more time for audience Q&amp;A."</div>
 
-    <p class="q-item"><strong>Balance of perspectives.</strong> <span class="theme-count">(2 comments)</span> Respondents suggested including critical or non-adopting voices alongside enthusiastic adopters.</p>
-    <div class="miniquote"><span class="ref">#27</span>"I wish that the first panel included critical non-users of AI. It felt very pro-AI. Also, the panel raised many issues with the application of AI in higher education."</div>
-    <div class="miniquote"><span class="ref">#14</span>"I think someone should have made the point that we have to teach students to be experts in something before the students can meaningfully engage a GenAI."</div>
+    <p class="q-item"><strong>Tech Expo logistics.</strong> <span class="theme-count">(2 comments)</span> Respondents offered suggestions on signage, timing, follow-up, and the social framing of the Expo.</p>
+    <div class="miniquote"><span class="ref">#18</span>"The Tech Expo felt too short to visit all the stations meaningfully. It would be very helpful to receive a list of stations in advance … While QR codes were provided for follow-up, I'd prefer to have my questions answered on the spot at the expo itself, rather than being redirected to external websites."</div>
+    <div class="miniquote"><span class="ref">#12</span>"The booths were not sufficiently signposted / set off from the general mingling space. The presence of alcohol also made it feel more 'social' than 'tech'."</div>
 
     <p class="q-item"><strong>Remote access and resources.</strong> <span class="theme-count">(2 comments)</span> A number of respondents participated only via Zoom; some wished for an in-person option, and several requested that session summaries and related resources be shared afterward.</p>
     <div class="miniquote"><span class="ref">#20</span>"I was only invited to the online Zoom kickoff which I very much enjoyed. I would have liked to have the option to attend in person."</div>
@@ -750,7 +934,7 @@ It also would have been interesting to have one or two undergraduate students of
 
   <footer>
     <p>Prepared from <code>2026_dataset.csv</code> (responses) and <code>2026_questions.docx</code> (survey instrument). UCLA Teaching and Learning Center — 2026 AI Symposium Post-Event Survey.</p>
-    <p><strong>Accessibility:</strong> Each chart includes a text description and an equivalent data table for users of assistive technology. The report uses semantic headings, table captions, keyboard-operable disclosures, and a visible focus indicator. If you encounter any barrier accessing this content, please contact the UCLA Teaching and Learning Center for an alternative format.</p>
+    <p><strong>Accessibility:</strong> Charts are decorative summaries; equivalent data appear in the rating tables and in expandable <strong>View data table</strong> sections below each chart. The report uses semantic headings, table captions, skip links, keyboard-operable disclosures, visible focus indicators, and respects reduced-motion preferences. If you encounter any barrier accessing this content, please contact the UCLA Teaching and Learning Center for an alternative format.</p>
   </footer>
 </div>
 
@@ -765,26 +949,74 @@ It also would have been interesting to have one or two undergraduate students of
   // Show data labels on bars; off by default so each chart opts in.
   if (window.ChartDataLabels) Chart.register(window.ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', { display:false });
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const chartAnim = prefersReducedMotion ? false : { duration: 400 };
+  Chart.defaults.animation = chartAnim;
+  Chart.defaults.set('plugins.tooltip', { enabled: true, animation: false, external: htmlExternalTooltip });
+  Chart.defaults.set('interaction', { mode: 'nearest', intersect: true });
+  function getChartTooltipEl(chart){
+    const host = chart.canvas.parentNode;
+    let el = host.querySelector('.chart-html-tooltip');
+    if (!el){
+      el = document.createElement('div');
+      el.className = 'chart-html-tooltip';
+      el.setAttribute('role', 'tooltip');
+      host.appendChild(el);
+    }
+    return el;
+  }
+  function htmlExternalTooltip(context){
+    const { chart, tooltip } = context;
+    const el = getChartTooltipEl(chart);
+    if (!tooltip.body || !tooltip.body.length){
+      el.classList.remove('is-visible');
+      return;
+    }
+    const title = (tooltip.title || []).join(' ');
+    const lines = tooltip.body.map(function(b){ return b.lines.join(' '); });
+    el.innerHTML = (title ? '<div class="tip-title">' + title + '</div>' : '') +
+      lines.map(function(l){ return '<div>' + l + '</div>'; }).join('');
+    const canvas = chart.canvas;
+    el.style.left = (canvas.offsetLeft + tooltip.caretX) + 'px';
+    el.style.top = (canvas.offsetTop + tooltip.caretY) + 'px';
+    el.classList.add('is-visible');
+  }
+  function comboTooltipLabels(meanVal, pctVal, nVal){
+    return function(ctx){
+      const i = ctx.dataIndex;
+      if (ctx.datasetIndex === 0) return 'Mean: ' + meanVal[i].toFixed(2) + (nVal ? ' (n=' + nVal[i] + ')' : '');
+      if (ctx.datasetIndex === 1) return '% Agree: ' + pctVal[i] + '%';
+      return '';
+    };
+  }
+  function countPctTooltip(total){
+    return function(c){
+      const v = c.parsed.x != null ? c.parsed.x : c.parsed;
+      return c.dataset.label + ': ' + v + ' (' + Math.round(v / total * 100) + '%)';
+    };
+  }
+  function stackedPctTooltip(totals){
+    return function(c){
+      const v = c.parsed.x;
+      const total = totals[c.dataIndex];
+      return c.dataset.label + ': ' + v + ' (' + Math.round(v / total * 100) + '%)';
+    };
+  }
+  function facultySliceTextColor(i){
+    const bg = PALETTE[i];
+    return (bg === '#8BB8E8' || bg === '#FFB81C' || bg === '#FFC72C') ? '#1f2933' : '#ffffff';
+  }
   const noLegend = { plugins:{ legend:{ display:false }, datalabels:{ display:false } } };
   const likertTextColor = (ctx)=> (ctx.datasetIndex <= 1 ? '#ffffff' : '#1f2933');
-  const meanInside = {
-    display:true, anchor:'end', align:'center', clip:false, color:'#ffffff', font:{ weight:'700', size:12 },
-    formatter:(v)=>v.toFixed(2),
-    offset:(ctx)=>{
-      const el = ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.dataIndex];
-      if (!el) return 0;
-      return ctx.chart.options.indexAxis === 'y' ? -el.width / 2 : -el.height / 2;
-    }
-  };
-  const twoLine = (text, n)=> text + '\nn=' + n;
-  function stackedLabel(totals, minPct, fontSize){
+  function stackedLabel(totals, minPct, fontSize, minCount){
     const size = fontSize || 10;
+    const minN = minCount != null ? minCount : 3;
     return {
       display:(ctx)=>{
         const n = ctx.dataset.data[ctx.dataIndex];
-        if (!n) return false;
+        if (!n || n < minN) return false;
         const total = totals[ctx.dataIndex];
-        return (n / total * 100) >= minPct || n >= 3;
+        return (n / total * 100) >= minPct || n >= minN;
       },
       anchor:'center', align:'center', clip:false,
       color:likertTextColor, font:{ size:size, weight:'700' },
@@ -795,75 +1027,186 @@ It also would have been interesting to have one or two undergraduate students of
     };
   }
 
-  // 2. Faculty mix (doughnut)
+  // 2. Faculty mix (doughnut) — on-slice labels when n >= 3; smaller groups in note below chart
+  const facultyMixLabels = ['Faculty', 'Staff', 'Students', 'Extension Instr.', 'Admin', 'Other', 'Postdoc'];
+  const facultyMixData = [32, 7, 3, 3, 2, 2, 1];
+  const facultyMixTotal = 50;
   new Chart(document.getElementById('chartFacultyMix'), {
     type:'doughnut',
-    data:{ labels:['Faculty (64%, n=32)','Staff (14%, n=7)','Students (6%, n=3)','Extension Instr. (6%, n=3)','Admin (4%, n=2)','Other (4%, n=2)','Postdoc (2%, n=1)'],
-      datasets:[{ data:[32,7,3,3,2,2,1], backgroundColor:PALETTE, borderColor:'#fff', borderWidth:2 }] },
+    data:{ labels:facultyMixLabels,
+      datasets:[{ data:facultyMixData, backgroundColor:PALETTE, borderColor:'#fff', borderWidth:2,
+        datalabels:{
+          display:(ctx)=> facultyMixData[ctx.dataIndex] >= 3,
+          color:(ctx)=> facultySliceTextColor(ctx.dataIndex),
+          font:(ctx)=>({ weight:'700', size: facultyMixData[ctx.dataIndex] >= 7 ? 12 : 10 }),
+          textAlign:'center',
+          formatter:(value)=> value + ' (' + Math.round(value / facultyMixTotal * 100) + '%)'
+        } }] },
     options:{ maintainAspectRatio:false,
-      plugins:{ legend:{ position:'right', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label:(c)=> c.label.split(' (')[0]+': '+Math.round(c.parsed/50*100)+'% (n='+c.parsed+')' } } } }
+      interaction:{ mode:'point', intersect:true },
+      elements:{ arc:{ hoverOffset:6 } },
+      plugins:{
+        legend:{ position:'right', labels:{ boxWidth:14, font:{ size:14.5 } } },
+        datalabels:{ display:true, listeners:false },
+        tooltip:{
+          enabled:true,
+          callbacks:{
+            title:(items)=> facultyMixLabels[items[0].dataIndex],
+            label:(c)=>{
+              const n = typeof c.parsed === 'number' ? c.parsed : c.raw;
+              return n + ' (' + Math.round(n / facultyMixTotal * 100) + '%)';
+            }
+          }
+        }
+      } }
+  });
+
+  // 3. Division / School — 100% stacked bar; top 3 groups highlighted, rest grey (n = 49)
+  const divTotal = 49;
+  const DIV_MUTED = '#bcc4cc';
+  const divGroups = [
+    { label: 'L&S (all)', n: 16, highlight: true, color: '#2774AE' },
+    { label: 'Engineering', n: 6, highlight: true, color: '#005587' },
+    { label: 'Professional Health (all)', n: 17, highlight: true, color: '#003B5C' },
+    { label: 'Other professional schools (all)', n: 3, highlight: false },
+    { label: 'UCLA Extension', n: 2, highlight: false },
+    { label: 'Other (edited)', n: 5, highlight: false }
+  ];
+  function divPctLabelColor(g){
+    if (!g.highlight) return '#4a5568';
+    return (g.color === '#2774AE') ? '#ffffff' : '#ffffff';
+  }
+  new Chart(document.getElementById('chartDivision'), {
+    type:'bar',
+    data:{
+      labels:['All respondents'],
+      datasets: divGroups.map(function(g){
+        const pct = g.n / divTotal * 100;
+        return {
+          label: g.label,
+          data: [pct],
+          backgroundColor: g.highlight ? g.color : DIV_MUTED,
+          borderColor:'#fff',
+          borderWidth:2,
+          datalabels:{
+            display: g.highlight && pct >= 8,
+            color: divPctLabelColor(g),
+            font:{ weight:'700', size:11 },
+            formatter:()=> Math.round(pct) + '%'
+          }
+        };
+      })
+    },
+    options:{ indexAxis:'y', maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'bottom', labels:{ boxWidth:14, font:{ size:12 }, padding:14 } },
+        datalabels:{ display:true },
+        tooltip:{ callbacks:{
+          label:(c)=>{
+            const g = divGroups[c.datasetIndex];
+            const pct = Math.round(g.n / divTotal * 100);
+            return g.label + ': ' + g.n + ' (' + pct + '%)';
+          }
+        }}
+      },
+      scales:{
+        x:{ stacked:true, beginAtZero:true, max:100,
+          title:{ display:true, text:'Share of respondents (%)' },
+          ticks:{ callback:(v)=> v + '%' } },
+        y:{ stacked:true, display:false }
+      } }
   });
 
   // 5. Component comparison (mean)
+  const compLabels = ['Overall Experience', 'Keynote & Panel', 'Concurrent (avg attended)', 'Tech Expo / Social Hour'];
+  const compN = [50, 47, 32, 24];
   new Chart(document.getElementById('chartComponents'), {
     type:'bar',
-    data:{ labels:[twoLine('Overall Experience',50), twoLine('Keynote & Panel',47), twoLine('Concurrent (avg attended)',32), twoLine('Tech Expo / Social Hour',24)],
+    data:{ labels:compLabels,
       datasets:[{ label:'Mean rating', data:[4.34,4.41,4.18,3.95],
-        backgroundColor:BAR, borderRadius:4 }] },
-    options:{ maintainAspectRatio:false,
-      plugins:{ legend:{ display:false },
-        datalabels: meanInside },
-      scales:{ y:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } },
-        x:{ ticks:{ font:{ size:11 } } } } }
-  });
-
-  // 6. Overall experience: mean + %agree (dual axis)
-  // Custom canvas labels (not datalabels) — centered inside bars so they never collide with the line points above.
-  const overallAgree = [98, 88, 78, 84];
-  new Chart(document.getElementById('chartOverall'), {
-    type:'bar',
-    data:{ labels:[twoLine('Relevant to my work',50), twoLine('Practical ideas to apply',50), twoLine('Format/engagement',50), twoLine('New perspectives',50)],
-      datasets:[
-        { label:'Mean (1–5)', data:[4.64,4.28,4.24,4.18], backgroundColor:BAR, borderRadius:4, yAxisID:'y',
-          datalabels:{ display:false } },
-        { label:'% Agree (4–5)', data:overallAgree, type:'line', borderColor:'#FFB81C', backgroundColor:'#FFB81C', tension:.3, yAxisID:'y1', pointRadius:5, pointHoverRadius:6, borderWidth:2,
-          datalabels:{ display:false } }
-      ] },
+        backgroundColor:BAR, borderRadius:4, datalabels:{ display:false } }] },
     plugins:[{
-      id:'overallInsideLabels',
+      id:'componentsInsideLabels',
       afterDatasetsDraw(chart){
         const ctx = chart.ctx;
         const meta = chart.getDatasetMeta(0);
         meta.data.forEach((bar, i)=>{
           if (!bar || bar.height < 24) return;
           const x = bar.x;
-          const y = bar.y + bar.height / 2;
+          const y = bar.y + bar.height * 0.42;
           ctx.save();
           ctx.fillStyle = '#ffffff';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.font = '700 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-          ctx.fillText(chart.data.datasets[0].data[i].toFixed(2), x, y - 9);
-          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-          ctx.fillText(overallAgree[i] + '%', x, y + 9);
+          ctx.fillText(chart.data.datasets[0].data[i].toFixed(2), x, y - 6);
+          ctx.font = '600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillText('n=' + compN[i], x, y + 8);
           ctx.restore();
         });
       }
     }],
-    options:{ maintainAspectRatio:false, animation:{ duration:400 },
+    options:{ maintainAspectRatio:false, layout:{ padding:{ top:6 } },
+      plugins:{ legend:{ display:false },
+        tooltip:{ callbacks:{
+          label:(ctx)=> 'Mean: ' + ctx.parsed.y.toFixed(2) + ' (n=' + compN[ctx.dataIndex] + ')'
+        }} },
+      scales:{ y:{ min:1, max:5, title:{ display:true, text:'Mean (1–5)' } },
+        x:{ ticks:{ font:{ size:11 } } } } }
+  });
+
+  // 6. Overall experience: mean + %agree (dual axis)
+  const overallLabels = ['Relevant to my work', 'Practical ideas to apply', 'Format/engagement', 'New perspectives'];
+  const overallAgree = [98, 88, 78, 84];
+  new Chart(document.getElementById('chartOverall'), {
+    type:'bar',
+    data:{ labels:overallLabels,
+      datasets:[
+        { label:'Mean (1–5)', data:[4.64,4.28,4.24,4.18], backgroundColor:BAR, borderRadius:4, yAxisID:'y', order:2,
+          datalabels:{ display:false } },
+        { label:'% Agree (4–5)', data:overallAgree, type:'line', borderColor:'#FFB81C', backgroundColor:'#FFB81C', tension:.3, yAxisID:'y1', pointRadius:4, pointHoverRadius:5, borderWidth:2, order:1,
+          datalabels:{ display:false } }
+      ] },
+    plugins:[{
+      id:'overallBarLabels',
+      afterDatasetDraw(chart, args){
+        if (args.index !== 0) return;
+        const ctx = chart.ctx;
+        const barMeta = chart.getDatasetMeta(0);
+        barMeta.data.forEach((bar, i)=>{
+          if (!bar || bar.height < 20) return;
+          const x = bar.x;
+          const mean = chart.data.datasets[0].data[i].toFixed(2);
+          const pct = overallAgree[i] + '%';
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#7a5a00';
+          ctx.textBaseline = 'bottom';
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = '#ffffff';
+          ctx.strokeText(pct, x, bar.y - 8);
+          ctx.fillText(pct, x, bar.y - 8);
+          ctx.fillStyle = '#ffffff';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(mean, x, bar.y + bar.height * 0.45);
+          ctx.restore();
+        });
+      }
+    }],
+    options:{ maintainAspectRatio:false, animation: chartAnim,
+      layout:{ padding:{ top:36, bottom:8, left:4, right:12 } },
+      interaction:{ mode:'index', intersect:false },
       plugins:{
         legend:{ position:'top' },
-        tooltip:{ callbacks:{
-          label:(ctx)=>{
-            if (ctx.datasetIndex === 0) return ' Mean: ' + ctx.parsed.y.toFixed(2);
-            return ' % Agree: ' + ctx.parsed.y + '%';
-          }
+        tooltip:{ mode:'index', intersect:false, filter:(item)=> item.datasetIndex <= 1, callbacks:{
+          label: comboTooltipLabels([4.64,4.28,4.24,4.18], overallAgree, [50,50,50,50])
         }}
       },
       scales:{
         y:{ min:1, max:5, position:'left', title:{ display:true, text:'Mean' } },
-        y1:{ beginAtZero:true, max:100, position:'right', grid:{ drawOnChartArea:false }, title:{ display:true, text:'% Agree' } },
+        y1:{ beginAtZero:true, max:100, position:'right', grid:{ drawOnChartArea:false }, title:{ display:true, text:'% Agree' },
+          ticks:{ stepSize:20, callback:(v)=> v + '%' } },
         x:{ ticks:{ font:{ size:11 }, maxRotation:0, autoSkip:false } }
       } }
   });
@@ -872,7 +1215,7 @@ It also would have been interesting to have one or two undergraduate students of
   const LIKERT_COLORS = ['#003B5C','#005587','#8BB8E8','#FFB81C','#FFC72C']; // 1→5: darkest blue … darker gold
   const LIKERT_LABELS = ['1 Strongly Disagree','2 Disagree','3 Neutral','4 Agree','5 Strongly Agree'];
   // rows ordered to match the report table (top = highest mean)
-  const distItems = [twoLine('Relevant to my work',50), twoLine('Practical ideas to apply',50), twoLine('Format/engagement',50), twoLine('New perspectives',50)];
+  const distItems = ['Relevant to my work', 'Practical ideas to apply', 'Format/engagement', 'New perspectives'];
   const distData = [
     [0,0,1,16,33],  // Q21_2 relevant
     [0,0,6,24,20],  // Q21_3 practical
@@ -893,31 +1236,90 @@ It also would have been interesting to have one or two undergraduate students of
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+' ('+Math.round(c.parsed.x/50*100)+'%)' } } },
+        tooltip:{ callbacks:{ label: stackedPctTooltip(distTotals) } } },
       scales:{ x:{ stacked:true, beginAtZero:true, max:50, title:{ display:true, text:'Number of respondents' } },
         y:{ stacked:true } } }
   });
 
-  // 7. Concurrent sessions (bubble: x=mean, size=attendees); red outline = small sample n<10
+  // 7. Concurrent sessions — mean + % agree (combo bar, like overall experience)
   const SMALL='#bc4749';
+  const concMeans = [4.56, 4.31, 3.85, 3.61, 3.50];
+  const concAgree = [96, 88, 74, 56, 50]; // top-2-box % from pooled 3-item responses
+  const concLabels = [
+    'Using AI Tools',
+    'Evaluating & Applying',
+    'Ethics, Integrity & Equity',
+    'AI Ethics Writing',
+    'Choose Your Own A(I)dventure'
+  ];
+  const concN = [16, 14, 13, 6, 2];
+  const concBarBorders = [null, null, null, SMALL, SMALL];
   new Chart(document.getElementById('chartConcurrent'), {
-    type:'bubble',
-    data:{ datasets:[
-      { label:'Using AI Tools (n=16)', data:[{x:4.56,y:5,r:18}], backgroundColor:'#003B5C' },
-      { label:'Evaluating & Applying (n=14)', data:[{x:4.31,y:4,r:16}], backgroundColor:'#005587' },
-      { label:'Ethics, Integrity & Equity (n=13)', data:[{x:3.85,y:3,r:15}], backgroundColor:'#8BB8E8' },
-      { label:'⚠ AI Ethics Writing (n=6, small)', data:[{x:3.61,y:2,r:10}], backgroundColor:'#FFB81C', borderColor:SMALL, borderWidth:3 },
-      { label:'⚠ Choose Your Own A(I)dventure (n=2, small)', data:[{x:3.50,y:1,r:7}], backgroundColor:'#FFC72C', borderColor:SMALL, borderWidth:3 }
-    ] },
-    options:{ maintainAspectRatio:false,
-      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label:(c)=> c.dataset.label.replace('⚠ ','')+' — mean '+c.parsed.x } } },
-      scales:{ x:{ min:1, max:5, title:{ display:true, text:'Mean rating (1–5)' } },
-        y:{ display:false, min:0, max:6 } } }
+    type:'bar',
+    data:{ labels:concLabels,
+      datasets:[
+        { label:'Mean (1–5)', data:concMeans, backgroundColor:BAR, borderRadius:4, xAxisID:'x', order:2,
+          borderColor:concBarBorders.map(c=>c||BAR),
+          borderWidth:concBarBorders.map(c=>c?3:0),
+          datalabels:{ display:false } },
+        { label:'% Agree (4–5)', data:concAgree, type:'line', borderColor:'#FFB81C', backgroundColor:'#FFB81C', tension:.3, xAxisID:'x1', pointRadius:4, pointHoverRadius:5, borderWidth:2, order:1,
+          datalabels:{ display:false } }
+      ] },
+    plugins:[{
+      id:'concBarLabels',
+      afterDatasetDraw(chart, args){
+        if (args.index !== 0) return;
+        const ctx = chart.ctx;
+        chart.getDatasetMeta(0).data.forEach((bar, i)=>{
+          if (!bar || bar.width < 24) return;
+          const inset = Math.min(14, Math.max(8, bar.width * 0.08));
+          ctx.save();
+          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(concMeans[i].toFixed(2), bar.x - inset, bar.y);
+          ctx.restore();
+        });
+      }
+    },{
+      id:'concPctLabels',
+      afterDatasetsDraw(chart){
+        const ctx = chart.ctx;
+        chart.getDatasetMeta(1).data.forEach((point, i)=>{
+          if (!point) return;
+          ctx.save();
+          ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+          ctx.fillStyle = '#7a5a00';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = '#ffffff';
+          const text = concAgree[i] + '%';
+          ctx.strokeText(text, point.x + 5, point.y);
+          ctx.fillText(text, point.x + 5, point.y);
+          ctx.restore();
+        });
+      }
+    }],
+    options:{ indexAxis:'y', maintainAspectRatio:false, animation: chartAnim,
+      layout:{ padding:{ top:12, bottom:8, left:4, right:52 } },
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ position:'top' },
+        tooltip:{ mode:'index', intersect:false, filter:(item)=> item.datasetIndex <= 1, callbacks:{
+          label: comboTooltipLabels(concMeans, concAgree, concN)
+        }}
+      },
+      scales:{
+        x:{ min:1, max:5, position:'bottom', title:{ display:true, text:'Mean' } },
+        x1:{ min:0, max:100, position:'top', grid:{ drawOnChartArea:false }, title:{ display:true, text:'% Agree' } },
+        y:{ ticks:{ font:{ size:11 }, autoSkip:false } }
+      } }
   });
 
   // 7b. Tech Expo — distribution stacked bar (counts of 1–5), ordered by mean
-  const expoItems = [twoLine('Identify campus partners',23), twoLine('Tech Expo networking',23), twoLine('Social Hour networking',24), twoLine('Sense of AI developments',23)];
+  const expoItems = ['Identify campus partners', 'Tech Expo networking', 'Social Hour networking', 'Sense of AI developments'];
   const expoData = [
     [0,1,7,5,10],  // Q29_3 identify partners (n=23)
     [0,0,8,8,7],   // Q29_2 expo networking (n=23)
@@ -938,13 +1340,13 @@ It also would have been interesting to have one or two undergraduate students of
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+' ('+Math.round(c.parsed.x/expoTotals[c.dataIndex]*100)+'%)' } } },
+        tooltip:{ callbacks:{ label: stackedPctTooltip(expoTotals) } } },
       scales:{ x:{ stacked:true, beginAtZero:true, title:{ display:true, text:'Number of respondents' } },
         y:{ stacked:true } } }
   });
 
   // 7c. Concurrent sessions — response distribution (pooled 3 items), count-stacked
-  const concItems = [twoLine('Using AI Tools',16), twoLine('Evaluating & Applying',14), twoLine('Ethics, Integrity & Equity',13), twoLine('⚠ Building AI Ethics Writing',6), twoLine('⚠ Choose Your Own A(I)dventure',2)];
+  const concItems = ['Using AI Tools', 'Evaluating & Applying', 'Ethics, Integrity & Equity', 'Building AI Ethics Writing', 'Choose Your Own A(I)dventure'];
   const concData = [
     [0,0,2,17,29], // Using AI Tools (total 48)
     [0,3,2,16,21], // Evaluating & Applying (total 42)
@@ -962,18 +1364,18 @@ It also would have been interesting to have one or two undergraduate students of
         backgroundColor:LIKERT_COLORS[i],
         borderColor:'#fff',
         borderWidth:1,
-        datalabels: stackedLabel(concTotals, 10)
+        datalabels: stackedLabel(concTotals, 10, 10, 4)
       })) },
     options:{ indexAxis:'y', maintainAspectRatio:false,
       plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+' ('+Math.round(c.parsed.x/concTotals[c.dataIndex]*100)+'%)' } } },
+        tooltip:{ callbacks:{ label: stackedPctTooltip(concTotals) } } },
       scales:{ x:{ stacked:true, beginAtZero:true, title:{ display:true, text:'Number of responses (3 items pooled)' } },
         y:{ stacked:true } } }
   });
 
   // 7d. Concurrent sessions — per-item distribution (rendered lazily when dropdown opens)
   function buildConcItemCharts(){
-    const sessLabels = [twoLine('Using AI Tools',16), twoLine('Evaluating & Applying',14), twoLine('Ethics, Integrity & Equity',13), twoLine('⚠ Building AI Ethics Writing',6), twoLine('⚠ Choose Your Own A(I)dventure',2)];
+    const sessLabels = ['Using AI Tools', 'Evaluating & Applying', 'Ethics, Integrity & Equity', 'Building AI Ethics Writing', 'Choose Your Own A(I)dventure'];
     const item1 = [[0,0,1,7,8],[0,1,1,5,7],[0,1,2,8,2],[0,1,2,2,1],[0,0,1,1,0]]; // content relevant
     const item2 = [[0,0,1,5,10],[0,1,0,6,7],[0,2,1,7,3],[0,1,1,3,1],[0,0,1,1,0]]; // new knowledge
     const item3 = [[0,0,0,5,11],[0,1,1,5,7],[0,1,3,6,3],[0,1,2,1,2],[0,0,1,1,0]]; // applicable
@@ -986,7 +1388,7 @@ It also would have been interesting to have one or two undergraduate students of
             datalabels: stackedLabel(rowTotals, 10) })) },
         options:{ indexAxis:'y', maintainAspectRatio:false,
           plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-            tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.x+' ('+Math.round(c.parsed.x/rowTotals[c.dataIndex]*100)+'%)' } } },
+            tooltip:{ callbacks:{ label: stackedPctTooltip(rowTotals) } } },
           scales:{ x:{ stacked:true, beginAtZero:true, ticks:{ precision:0 }, title:{ display:true, text:'Number of responses' } },
             y:{ stacked:true } } }
       });
@@ -1001,7 +1403,7 @@ It also would have been interesting to have one or two undergraduate students of
   // 8. Tech Expo means (horizontal bars — custom inside labels to avoid clipping)
   new Chart(document.getElementById('chartExpo'), {
     type:'bar',
-    data:{ labels:[twoLine('Identify campus partners',23), twoLine('Tech Expo networking',23), twoLine('Social Hour networking',24), twoLine('Sense of AI developments',23)],
+    data:{ labels:expoItems,
       datasets:[{ data:[4.04,3.96,3.92,3.87], backgroundColor:BAR, borderRadius:4,
         datalabels:{ display:false } }] },
     plugins:[{
